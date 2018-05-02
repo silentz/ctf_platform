@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from api.serializers import UserSerializer
 from rest_framework.decorators import action
 from rest_framework.views import APIView
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from rest_framework import permissions
 
 
@@ -13,6 +13,13 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class UserLogoutAPIView(APIView):
+
+    def get(self, request, format=None):
+        logout(request)
+        return Response({'status': 'ok'}, status=status.HTTP_200_OK)
 
 
 class UserRegistrationAPIView(APIView):
