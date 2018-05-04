@@ -1,18 +1,99 @@
 from rest_framework import viewsets
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
 from rest_framework import status
 from rest_framework.response import Response
-from api.serializers import UserSerializer
 from rest_framework.decorators import action
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import permissions
+from api.models import *
+from api.permissions import *
+from api.serializers import *
+from django.http import StreamingHttpResponse
+from wsgiref.util import FileWrapper
+
+
+class TaskViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAdminOrTaskOpen, IsAdminOrReadOnly)
+    queryset = Task.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.user.is_staff:
+            return TaskAdminSerializer
+        else:
+            return TaskSerializer
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        return super(TaskViewSet, self).dispatch(request, *args, **kwargs)
+
+    @action(methods=['post'], detail=True)
+    def pass_flag(self, request, pk):
+        obj = self.get_object()
+        if obj.check_flag(request.data.get('flag', None)):
+            obj.solved.add(request.user)
+            return Response({'status': 'ok'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'status': 'bad'}, status=status.HTTP_200_OK)
+
+
+class ContestViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAdminOrReadOnly, IsAdminOrContestOpen)
+    queryset = Contest.objects.all()
+    serializer_class = ContestSerializer
+
+
+class TaskFileViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAdminOrParentTaskOpen, IsAdminOrReadOnly)
+    queryset = TaskFile.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return TaskFileCreateSerializer
+        else:
+            return TaskFileSerializer
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        return super(TaskFileViewSet, self).dispatch(request, *args, **kwargs)
+
+    @action(methods=['get'], detail=True)
+    def download(self, request, pk, *args, **kwargs):
+        instance = self.get_object()
+        chunk_size = 8192
+        response = StreamingHttpResponse(FileWrapper(instance.file, chunk_size))
+        response['Content-Length'] = instance.file.size
+        response['Content-Disposition'] = "attachment; filename=%s" % instance.name
+        return response
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAdminOrReadOnly,)
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+class FlagViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsAdminUser,)
+    queryset = Flag.objects.all()
+    serializer_class = FlagSerializer
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
-
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    permissions = (IsAdminOrReadOnly,)
+
+
+class PermissionViewSet(viewsets.ModelViewSet):
+    queryset = Permission.objects.all()
+    serializer_class = PermissionSerializer
+    permissions = (IsAdminOrReadOnly,)
 
 
 class UserLogoutAPIView(APIView):
@@ -23,7 +104,6 @@ class UserLogoutAPIView(APIView):
 
 
 class UserRegistrationAPIView(APIView):
-
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, format=None):
@@ -40,7 +120,6 @@ class UserRegistrationAPIView(APIView):
 
 
 class UserLoginAPIView(APIView):
-
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, format=None):

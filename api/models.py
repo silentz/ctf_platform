@@ -20,10 +20,23 @@ class Task(models.Model):
     contest = models.ForeignKey(Contest, related_name='tasks', null=True, on_delete=models.SET_NULL)
     flag = models.CharField(max_length=512, null=True)
     category = models.ForeignKey(Category, related_name='tasks', null=True, on_delete=models.SET_NULL)
-    solved = models.ManyToManyField(User, related_name='solved_tasks')
+    solved = models.ManyToManyField(User, related_name='solved_tasks', blank=True)
     # for flag generator support
     use_generator = models.BooleanField(default=False)
     token = models.CharField(max_length=512)
+
+    def check_flag(self, flag):
+        if self.use_generator:
+            try:
+                obj = Flag.objects.filter(flag=flag, used=False)[0]
+            except IndexError as err:
+                return False
+            else:
+                obj.used = True
+                obj.save()
+                return True
+        else:
+            return flag == self.flag
 
 
 class Flag(models.Model):
@@ -34,4 +47,5 @@ class Flag(models.Model):
 
 class TaskFile(models.Model):
     task = models.ForeignKey(Task, related_name='files', null=True, on_delete=models.SET_NULL)
-    file = models.FileField(upload_to='media/')
+    file = models.FileField(max_length=512)
+    name = models.CharField(max_length=512, null=True)

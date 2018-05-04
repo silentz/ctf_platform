@@ -3,7 +3,14 @@ from api import views
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register('users', views.UserViewSet, base_name='user')
+router.register('categories', views.CategoryViewSet)
+router.register('contests', views.ContestViewSet)
+router.register('files', views.TaskFileViewSet)
+router.register('flags', views.FlagViewSet)
+router.register('groups', views.GroupViewSet)
+router.register('permissions', views.PermissionViewSet)
+router.register('tasks', views.TaskViewSet)
+router.register('users', views.UserViewSet)
 
 urlpatterns = [
     *router.urls,
