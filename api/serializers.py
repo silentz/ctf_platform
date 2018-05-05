@@ -22,10 +22,16 @@ class PermissionSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'name',)
 
 
+class ContestListSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Contest
+        fields = ('url', 'name', 'start_datetime', 'finish_datetime', 'allowed_groups')
+
+
 class ContestSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Contest
-        fields = '__all__'
+        fields = ('url', 'name', 'start_datetime', 'finish_datetime', 'tasks', 'allowed_groups')
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):

@@ -1,6 +1,6 @@
 from rest_framework import permissions
 from api.models import Contest, Task
-from datetime import datetime
+from django.utils import timezone
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
@@ -24,9 +24,9 @@ class IsAdminOrTaskOpen(permissions.BasePermission):
         if request.user.is_staff:
             return True
         else:
-            now = datetime.now()
-            return now >= obj.contest.start_time and \
-                (obj.contest.finish_time is None or now < obj.contest.finish_time)
+            now = timezone.now()
+            return now >= obj.contest.start_dattime and \
+                (obj.contest.finish_datetime is None or now < obj.contest.finish_datetime)
 
 
 class IsAdminOrParentTaskOpen(permissions.BasePermission):
@@ -35,9 +35,9 @@ class IsAdminOrParentTaskOpen(permissions.BasePermission):
         if request.user.is_staff:
             return True
         else:
-            now = datetime.now()
-            return now >= obj.task.contest.start_time and \
-                (obj.task.contest.finish_time is None or now < obj.task.contest.finish_time)
+            now = timezone.now()
+            return now >= obj.task.contest.start_datetime and \
+                (obj.task.contest.finish_datetime is None or now < obj.task.contest.finish_datetime)
 
 
 class IsAdminOrContestOpen(permissions.BasePermission):
@@ -46,5 +46,5 @@ class IsAdminOrContestOpen(permissions.BasePermission):
         if request.user.is_staff:
             return True
         else:
-            now = datetime.now()
-            return now >= obj.start_time and (obj.finish_time is None or now < obj.finish_time)
+            now = timezone.now()
+            return now >= obj.start_datetime and (obj.finish_datetime is None or now < obj.finish_datetime)

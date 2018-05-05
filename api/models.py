@@ -3,9 +3,10 @@ from django.contrib.auth.models import User, Group
 
 
 class Contest(models.Model):
+    name = models.CharField(max_length=512, blank=True, null=True)
     start_datetime = models.DateTimeField()
     finish_datetime = models.DateTimeField(null=True)
-    allowed_groups = models.ManyToManyField(Group, related_name='allowed_contests')
+    allowed_groups = models.ManyToManyField(Group, related_name='allowed_contests', blank=True)
 
 
 class Category(models.Model):
@@ -17,9 +18,9 @@ class Task(models.Model):
     name = models.CharField(max_length=512)
     score = models.IntegerField()
     description = models.TextField()  # TODO: markdown support
-    contest = models.ForeignKey(Contest, related_name='tasks', null=True, on_delete=models.SET_NULL)
+    contest = models.ForeignKey(Contest, related_name='tasks', null=True, blank=True, on_delete=models.SET_NULL)
     flag = models.CharField(max_length=512, null=True)
-    category = models.ForeignKey(Category, related_name='tasks', null=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey(Category, related_name='tasks', null=True, blank=True, on_delete=models.SET_NULL)
     solved = models.ManyToManyField(User, related_name='solved_tasks', blank=True)
     # for flag generator support
     use_generator = models.BooleanField(default=False)
@@ -46,6 +47,6 @@ class Flag(models.Model):
 
 
 class TaskFile(models.Model):
-    task = models.ForeignKey(Task, related_name='files', null=True, on_delete=models.SET_NULL)
+    task = models.ForeignKey(Task, related_name='files', null=True, blank=True, on_delete=models.SET_NULL)
     file = models.FileField(max_length=512)
     name = models.CharField(max_length=512, null=True)
