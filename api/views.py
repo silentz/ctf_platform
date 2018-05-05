@@ -5,16 +5,16 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login, logout
-from rest_framework import permissions
 from api.models import *
 from api.permissions import *
 from api.serializers import *
 from django.http import StreamingHttpResponse
 from wsgiref.util import FileWrapper
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 
 class TaskViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAdminOrTaskOpen, IsAdminOrReadOnly)
+    permission_classes = (IsAdminOrTaskOpen, IsAdminOrReadOnly, IsAuthenticated)
     queryset = Task.objects.all()
 
     def get_serializer_class(self):
@@ -38,13 +38,13 @@ class TaskViewSet(viewsets.ModelViewSet):
 
 
 class ContestViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAdminOrReadOnly, IsAdminOrContestOpen)
+    permission_classes = (IsAdminOrReadOnly, IsAdminOrContestOpen, IsAuthenticated)
     queryset = Contest.objects.all()
     serializer_class = ContestSerializer
 
 
 class TaskFileViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAdminOrParentTaskOpen, IsAdminOrReadOnly)
+    permission_classes = (IsAdminOrParentTaskOpen, IsAdminOrReadOnly, IsAuthenticated)
     queryset = TaskFile.objects.all()
 
     def get_serializer_class(self):
@@ -68,13 +68,13 @@ class TaskFileViewSet(viewsets.ModelViewSet):
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAdminOrReadOnly, IsAuthenticated)
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
 
 class FlagViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (IsAdminUser, IsAuthenticated)
     queryset = Flag.objects.all()
     serializer_class = FlagSerializer
 
@@ -87,13 +87,13 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permissions = (IsAdminOrReadOnly,)
+    permissions = (IsAdminOrReadOnly, IsAuthenticated)
 
 
 class PermissionViewSet(viewsets.ModelViewSet):
     queryset = Permission.objects.all()
     serializer_class = PermissionSerializer
-    permissions = (IsAdminOrReadOnly,)
+    permissions = (IsAdminOrReadOnly, IsAuthenticated)
 
 
 class UserLogoutAPIView(APIView):
