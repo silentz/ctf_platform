@@ -26,16 +26,18 @@ class Task(models.Model):
     use_generator = models.BooleanField(default=False)
     token = models.CharField(max_length=512)
 
+    def check_flag_using_generator(self, flag):
+        try:
+            generated_flag = Flag.objects.get(flag=flag, used=False)
+        except Flag.DoesNotExist:
+            return False
+        generated_flag.used = True
+        generated_flag.save()
+        return True
+
     def check_flag(self, flag):
         if self.use_generator:
-            try:
-                obj = Flag.objects.filter(flag=flag, used=False)[0]
-            except IndexError as err:
-                return False
-            else:
-                obj.used = True
-                obj.save()
-                return True
+            return self.check_flag_using_generator(flag)
         else:
             return flag == self.flag
 
