@@ -11,6 +11,7 @@ from api.serializers import *
 from django.http import StreamingHttpResponse
 from wsgiref.util import FileWrapper
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.exceptions import PermissionDenied
 
 
 class TaskViewSet(viewsets.ModelViewSet):
@@ -20,8 +21,10 @@ class TaskViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.request.user.is_staff:
             return TaskAdminSerializer
-        else:
+        elif self.action == 'retrieve':
             return TaskSerializer
+        else:
+            raise PermissionDenied
 
     def dispatch(self, request, *args, **kwargs):
         self.request = request
@@ -46,7 +49,6 @@ class ContestViewSet(viewsets.ModelViewSet):
             return ContestListSerializer
         else:
             return ContestSerializer
-
 
 
 class TaskFileViewSet(viewsets.ModelViewSet):

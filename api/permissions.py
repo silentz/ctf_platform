@@ -25,7 +25,7 @@ class IsAdminOrTaskOpen(permissions.BasePermission):
             return True
         else:
             now = timezone.now()
-            return now >= obj.contest.start_dattime and \
+            return now >= obj.contest.start_datetime and \
                 (obj.contest.finish_datetime is None or now < obj.contest.finish_datetime)
 
 
