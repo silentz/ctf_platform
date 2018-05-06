@@ -56,14 +56,12 @@ class TaskFileViewSet(viewsets.ModelViewSet):
     queryset = TaskFile.objects.all()
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
+        if self.action == 'create':
             return TaskFileCreateSerializer
+        elif self.action == 'list':
+            return TaskFileListSerializer
         else:
             return TaskFileSerializer
-
-    def dispatch(self, request, *args, **kwargs):
-        self.request = request
-        return super(TaskFileViewSet, self).dispatch(request, *args, **kwargs)
 
     @action(methods=['get'], detail=True)
     def download(self, request, pk, *args, **kwargs):

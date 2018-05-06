@@ -58,6 +58,12 @@ class TaskFileCreateSerializer(serializers.HyperlinkedModelSerializer):
         return TaskFile.objects.create(task=task, name=name, file=file)
 
 
+class TaskFileListSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = TaskFile
+        fields = ('url',)
+
+
 class TaskFileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TaskFile
