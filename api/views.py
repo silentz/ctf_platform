@@ -91,18 +91,19 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class GroupViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAdminOrReadOnly, IsAuthenticated)
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permissions = (IsAdminOrReadOnly, IsAuthenticated)
 
 
 class PermissionViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAdminOrReadOnly, IsAuthenticated)
     queryset = Permission.objects.all()
     serializer_class = PermissionSerializer
-    permissions = (IsAdminOrReadOnly, IsAuthenticated)
 
 
 class UserLogoutAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
         logout(request)
