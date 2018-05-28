@@ -9,15 +9,13 @@ from datetime import datetime, timedelta
 class TaskTests(APITestCase):
 
     def create_instance(self, name, start_datetime, finish_datetime, allowed_groups, score, description,
-                        flag, category, solved=[], use_generator=False, token='tmp'):
+                        flag, category):
         contest = Contest(name=name, start_datetime=start_datetime, finish_datetime=finish_datetime)
         contest.save()
         contest.allowed_groups.set(allowed_groups)
         contest.save()
         task = Task(name=name, score=score, description=description, contest=contest,
-                    flag=flag, category=category, use_generator=use_generator, token=token)
-        task.save()
-        task.solved.set(solved)
+                    flag=flag, category=category)
         task.save()
 
     def create_user(self, login, password, is_staff=False):
@@ -107,24 +105,21 @@ class TaskTests(APITestCase):
     def test_create_as_anon(self):
         url = reverse('task-list')
         self.client.logout()
-        data = {'name': 'task5', 'flag': 'tmp', 'score': 100, 'description': 'tmp',
-                'use_generator': False, 'token': 'tmp'}
+        data = {'name': 'task5', 'flag': 'tmp', 'score': 100, 'description': 'tmp'}
         response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_as_user(self):
         url = reverse('task-list')
         self.client.login(username='user', password='user')
-        data = {'name': 'task5', 'flag': 'tmp', 'score': 100, 'description': 'tmp',
-                'use_generator': False, 'token': 'tmp'}
+        data = {'name': 'task5', 'flag': 'tmp', 'score': 100, 'description': 'tmp'}
         response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_as_admin(self):
         url = reverse('task-list')
         self.client.login(username='admin', password='admin')
-        data = {'name': 'task5', 'flag': 'tmp', 'score': 100, 'description': 'tmp',
-                'use_generator': False, 'token': 'tmp', 'solved': []}
+        data = {'name': 'task5', 'flag': 'tmp', 'score': 100, 'description': 'tmp'}
         response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['name'], 'task5')
@@ -132,24 +127,21 @@ class TaskTests(APITestCase):
     def test_update_as_anon(self):
         url = reverse('task-detail', kwargs={'pk': 1})
         self.client.logout()
-        data = {'name': 'task100', 'flag': 'tmp', 'score': 100, 'description': 'tmp',
-                'use_generator': False, 'token': 'tmp'}
+        data = {'name': 'task100', 'flag': 'tmp', 'score': 100, 'description': 'tmp'}
         response = self.client.put(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_as_user(self):
         url = reverse('task-detail', kwargs={'pk': 1})
         self.client.login(username='user', password='user')
-        data = {'name': 'task100', 'flag': 'tmp', 'score': 100, 'description': 'tmp',
-                'use_generator': False, 'token': 'tmp'}
+        data = {'name': 'task100', 'flag': 'tmp', 'score': 100, 'description': 'tmp'}
         response = self.client.put(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_as_admin(self):
         url = reverse('task-detail', kwargs={'pk': 1})
         self.client.login(username='admin', password='admin')
-        data = {'name': 'task100', 'flag': 'tmp', 'score': 100, 'description': 'tmp',
-                'use_generator': False, 'token': 'tmp'}
+        data = {'name': 'task100', 'flag': 'tmp', 'score': 100, 'description': 'tmp'}
         response = self.client.put(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['name'], 'task100')

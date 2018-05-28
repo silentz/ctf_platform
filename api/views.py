@@ -34,7 +34,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     def pass_flag(self, request, pk):
         obj = self.get_object()
         if obj.check_flag(request.data.get('flag', None)):
-            obj.solved.add(request.user)
+            TaskSolved.objects.create(task=obj, user=request.user)
             return Response({'status': 'ok'}, status=status.HTTP_200_OK)
         else:
             return Response({'status': 'bad'}, status=status.HTTP_200_OK)
@@ -77,12 +77,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly, IsAuthenticated)
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-
-
-class FlagViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAdminUser, IsAuthenticated)
-    queryset = Flag.objects.all()
-    serializer_class = FlagSerializer
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
