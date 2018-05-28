@@ -11,15 +11,13 @@ from django.core.files import File
 class TaskFileTests(APITestCase):
 
     def create_task(self, name, start_datetime, finish_datetime, allowed_groups, score, description,
-                    flag, category, solved=[], use_generator=False, token='tmp'):
+                    flag, category):
         contest = Contest(name=name, start_datetime=start_datetime, finish_datetime=finish_datetime)
         contest.save()
         contest.allowed_groups.set(allowed_groups)
         contest.save()
         task = Task(name=name, score=score, description=description, contest=contest,
-                    flag=flag, category=category, use_generator=use_generator, token=token)
-        task.save()
-        task.solved.set(solved)
+                    flag=flag, category=category)
         task.save()
         return task
 

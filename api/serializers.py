@@ -40,12 +40,6 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class FlagSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Flag
-        fields = '__all__'
-
-
 class TaskFileCreateSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TaskFile
@@ -74,11 +68,11 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Task
         fields = ('url', 'name', 'score', 'description', 'contest', 'category',
-                  'solved', 'use_generator', 'files')
+                  'solved', 'files')
 
 
 class TaskAdminSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Task
         fields = ('url', 'name', 'score', 'description', 'contest', 'category',
-                  'solved', 'use_generator', 'files', 'token', 'flag', 'generator_flags')
+                  'solved', 'files', 'flag')
