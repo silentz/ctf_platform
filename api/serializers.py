@@ -67,12 +67,10 @@ class TaskFileSerializer(serializers.HyperlinkedModelSerializer):
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Task
-        fields = ('url', 'name', 'score', 'description', 'contest', 'category',
-                  'solved', 'files')
+        fields = ('url', 'name', 'score', 'description', 'contest', 'category', 'files')
 
 
 class TaskAdminSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Task
-        fields = ('url', 'name', 'score', 'description', 'contest', 'category',
-                  'solved', 'files', 'flag')
+        fields = ('url', 'name', 'score', 'description', 'contest', 'category', 'files', 'flag')

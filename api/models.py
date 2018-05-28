@@ -27,6 +27,9 @@ class Task(models.Model):
 
 
 class TaskSolved(models.Model):
+    class Meta:
+        unique_together = ('task', 'user')
+
     task = models.ForeignKey(Task, related_name='solved', on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name='solved_tasks', on_delete=models.CASCADE)
     time = models.DateTimeField(auto_now_add=True)
