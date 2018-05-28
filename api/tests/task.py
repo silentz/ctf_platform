@@ -102,6 +102,46 @@ class TaskTests(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_pass_flag_as_user(self):
+        data = {'flag': 'tmp{tmp}'}
+        self.client.login(username='user', password='user')
+
+        url = reverse('task-pass-flag', kwargs={'pk': 1})
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        url = reverse('task-pass-flag', kwargs={'pk': 2})
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        url = reverse('task-pass-flag', kwargs={'pk': 3})
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        url = reverse('task-pass-flag', kwargs={'pk': 4})
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_pass_flag_as_admin(self):
+        data = {'flag': 'tmp{tmp}'}
+        self.client.login(username='admin', password='admin')
+
+        url = reverse('task-pass-flag', kwargs={'pk': 1})
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        url = reverse('task-pass-flag', kwargs={'pk': 2})
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        url = reverse('task-pass-flag', kwargs={'pk': 3})
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        url = reverse('task-pass-flag', kwargs={'pk': 4})
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_create_as_anon(self):
         url = reverse('task-list')
         self.client.logout()

@@ -15,7 +15,6 @@ from rest_framework.exceptions import PermissionDenied
 
 
 class TaskViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAdminOrTaskOpen, IsAdminOrReadOnly, IsAuthenticated)
     queryset = Task.objects.all()
 
     def get_serializer_class(self):
@@ -26,18 +25,21 @@ class TaskViewSet(viewsets.ModelViewSet):
         else:
             raise PermissionDenied
 
-    def dispatch(self, request, *args, **kwargs):
-        self.request = request
-        return super(TaskViewSet, self).dispatch(request, *args, **kwargs)
+    def get_permissions(self):
+        if self.action == 'pass_flag':
+            self.permission_classes = [IsAdminOrTaskOpen, IsAuthenticated]
+        else:
+            self.permission_classes = [IsAdminOrTaskOpen, IsAdminOrReadOnly, IsAuthenticated]
+        return super(TaskViewSet, self).get_permissions()
 
     @action(methods=['post'], detail=True)
     def pass_flag(self, request, pk):
         obj = self.get_object()
         if obj.check_flag(request.data.get('flag', None)):
-            TaskSolved.objects.create(task=obj, user=request.user)
+            TaskSolved.objects.get_or_create(task=obj, user=request.user)
             return Response({'status': 'ok'}, status=status.HTTP_200_OK)
         else:
-            return Response({'status': 'bad'}, status=status.HTTP_200_OK)
+            return Response({'status': 'bad'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ContestViewSet(viewsets.ModelViewSet):
