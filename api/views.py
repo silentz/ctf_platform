@@ -113,13 +113,13 @@ class GroupViewSet(viewsets.ModelViewSet):
         GroupAdditional.objects.create(group=group, invite_code=invite_code)
         return Response({'status': 'ok'}, status=status.HTTP_201_CREATED)
 
-    def update(self, request, pk):
+    def update(self, request, pk, partial=False):
         invite_code = request.data.get('invite_code', None)
         if invite_code is not None:
             options = self.get_object().options
             options.invite_code = invite_code
             options.save()
-        return super(GroupViewSet, self).update(request, pk)
+        return super(GroupViewSet, self).update(request, pk, partial)
 
     @action(methods=['post'], detail=True)
     def access(self, request, pk, *args, **kwargs):
