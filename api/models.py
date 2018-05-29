@@ -39,3 +39,8 @@ class TaskFile(models.Model):
     task = models.ForeignKey(Task, related_name='files', null=True, blank=True, on_delete=models.SET_NULL)
     file = models.FileField(max_length=512)
     name = models.CharField(max_length=512, null=True)
+
+
+class GroupAdditional(models.Model):
+    group = models.OneToOneField(Group, related_name='options', on_delete=models.CASCADE)
+    invite_code = models.CharField(max_length=512)

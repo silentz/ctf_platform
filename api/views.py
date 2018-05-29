@@ -87,9 +87,49 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class GroupViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAdminOrReadOnly, IsAuthenticated)
     queryset = Group.objects.all()
-    serializer_class = GroupSerializer
+
+    def get_permissions(self):
+        if self.action == 'access':
+            self.permission_classes = [IsAuthenticated]
+        else:
+            self.permission_classes = [IsAdminOrReadOnly, IsAuthenticated]
+        return super(GroupViewSet, self).get_permissions()
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return GroupCreateSerializer
+        elif self.request.user.is_staff:
+            return GroupAdminSerializer
+        else:
+            return GroupSerializer
+
+    def create(self, request, *args, **kwargs):
+        name = request.data.get('name', None)
+        invite_code = request.data.get('invite_code', None)
+        if Group.objects.filter(name=name).exists():
+            return Response({'status': 'group already exists'}, status=status.HTTP_400_BAD_REQUEST)
+        group = Group.objects.create(name=name)
+        GroupAdditional.objects.create(group=group, invite_code=invite_code)
+        return Response({'status': 'ok'}, status=status.HTTP_201_CREATED)
+
+    def update(self, request, pk):
+        invite_code = request.data.get('invite_code', None)
+        if invite_code is not None:
+            options = self.get_object().options
+            options.invite_code = invite_code
+            options.save()
+        return super(GroupViewSet, self).update(request, pk)
+
+    @action(methods=['post'], detail=True)
+    def access(self, request, pk, *args, **kwargs):
+        invite_code = request.data.get('invite_code', None)
+        group = self.get_object()
+        if invite_code == group.options.invite_code:
+            request.user.groups.add(group)
+            return Response({'status': 'ok'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'status': 'wrong invite code'}, status=status.HTTP_403_FORBIDDEN)
 
 
 class PermissionViewSet(viewsets.ModelViewSet):

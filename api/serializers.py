@@ -10,10 +10,29 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('username', 'url', 'groups')
 
 
+class GroupCreateSerializer(serializers.HyperlinkedModelSerializer):
+    invite_code = serializers.CharField(max_length=512)
+
+    class Meta:
+        model = Group
+        fields = ('name', 'url', 'invite_code')
+
+
+class GroupAdminSerializer(serializers.HyperlinkedModelSerializer):
+    invite_code = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Group
+        fields = ('name', 'url', 'invite_code')
+
+    def get_invite_code(self, obj):
+        return obj.options.invite_code
+
+
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
-        fields = '__all__'
+        fields = ('name', 'url')
 
 
 class PermissionSerializer(serializers.HyperlinkedModelSerializer):
