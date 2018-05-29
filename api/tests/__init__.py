@@ -5,3 +5,5 @@ from api.tests.task import TaskTests
 from api.tests.taskfile import TaskFileTests
 from api.tests.user import UserTests
 from api.tests.group import GroupTests
+from api.tests.message import MessageTests
+from api.tests.hint import HintTests

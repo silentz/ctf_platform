@@ -27,9 +27,9 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'pass_flag':
-            self.permission_classes = [IsAdminOrTaskOpen, IsAuthenticated]
+            self.permission_classes = [IsAdminOrParentContestOpen, IsAuthenticated]
         else:
-            self.permission_classes = [IsAdminOrTaskOpen, IsAdminOrReadOnly, IsAuthenticated]
+            self.permission_classes = [IsAdminOrParentContestOpen, IsAdminOrReadOnly, IsAuthenticated]
         return super(TaskViewSet, self).get_permissions()
 
     @action(methods=['post'], detail=True)
@@ -73,6 +73,30 @@ class TaskFileViewSet(viewsets.ModelViewSet):
         response['Content-Length'] = instance.file.size
         response['Content-Disposition'] = "attachment; filename=%s" % instance.name
         return response
+
+
+class HintViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAdminOrParentTaskOpen, IsAdminOrReadOnly, IsAuthenticated)
+    queryset = Hint.objects.all()
+    serializer_class = HintSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return HintListSerializer
+        else:
+            return HintSerializer
+
+
+class MessageViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAdminOrParentContestOpen, IsAdminOrReadOnly, IsAuthenticated)
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return MessageListSerializer
+        else:
+            return MessageSerializer
 
 
 class CategoryViewSet(viewsets.ModelViewSet):

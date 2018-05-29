@@ -41,6 +41,16 @@ class TaskFile(models.Model):
     name = models.CharField(max_length=512, null=True)
 
 
+class Hint(models.Model):
+    task = models.ForeignKey(Task, related_name='hints', on_delete=models.CASCADE)
+    text = models.TextField()
+
+
+class Message(models.Model):
+    contest = models.ForeignKey(Contest, related_name='messages', on_delete=models.CASCADE)
+    text = models.TextField()
+
+
 class GroupAdditional(models.Model):
     group = models.OneToOneField(Group, related_name='options', on_delete=models.CASCADE)
     invite_code = models.CharField(max_length=512)
