@@ -50,7 +50,7 @@ class ContestListSerializer(serializers.HyperlinkedModelSerializer):
 class ContestSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Contest
-        fields = ('url', 'name', 'start_datetime', 'finish_datetime', 'tasks', 'allowed_groups')
+        fields = ('url', 'name', 'start_datetime', 'finish_datetime', 'tasks', 'allowed_groups', 'messages')
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
@@ -86,10 +86,34 @@ class TaskFileSerializer(serializers.HyperlinkedModelSerializer):
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Task
-        fields = ('url', 'name', 'score', 'description', 'contest', 'category', 'files')
+        fields = ('url', 'name', 'score', 'description', 'contest', 'category', 'files', 'hints')
 
 
 class TaskAdminSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Task
-        fields = ('url', 'name', 'score', 'description', 'contest', 'category', 'files', 'flag')
+        fields = ('url', 'name', 'score', 'description', 'contest', 'category', 'files', 'flag', 'hints')
+
+
+class MessageListSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Message
+        fields = ('url', 'contest')
+
+
+class MessageSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Message
+        fields = ('url', 'contest', 'text')
+
+
+class HintListSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Hint
+        fields = ('url', 'task')
+
+
+class HintSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Hint
+        fields = ('url', 'task', 'text')

@@ -18,7 +18,7 @@ class IsAdminOrReadOnly(permissions.BasePermission):
             return request.user.is_staff
 
 
-class IsAdminOrTaskOpen(permissions.BasePermission):
+class IsAdminOrParentContestOpen(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if request.user.is_staff:

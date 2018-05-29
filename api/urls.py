@@ -10,6 +10,8 @@ router.register('groups', views.GroupViewSet)
 router.register('permissions', views.PermissionViewSet)
 router.register('tasks', views.TaskViewSet)
 router.register('users', views.UserViewSet)
+router.register('hints', views.HintViewSet)
+router.register('messages', views.MessageViewSet)
 
 urlpatterns = [
     *router.urls,
