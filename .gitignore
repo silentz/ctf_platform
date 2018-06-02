@@ -7,3 +7,4 @@ media/*
 !**/.gitkeep
 .coverage
 venv
+node_modules/**
