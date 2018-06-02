@@ -5,6 +5,6 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 new Vue({
-  el: '#app',
-  render: h => h(App)
+    el: '#app',
+    render: h => h(App)
 })
