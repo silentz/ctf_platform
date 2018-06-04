@@ -6,7 +6,9 @@
             <ul class='ctf-nav-list'>
                 <template v-if="isAuthenticated">
                     <li class='ctf-nav-list-item'>
-                        <a @click="logout" href="" class='ctf-nav-link'>Logout</a>
+                        <a @click="logout" href="" class='ctf-nav-link'>
+                            Logout
+                        </a>
                     </li>
                 </template>
                 <template v-else>
@@ -55,33 +57,5 @@ export default {
 </script>
 
 <style lang="scss">
-.ctf-nav {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #0E0030;
-    color: white;
-}
-.ctf-nav-logo {
-    display: inline-block;
-    margin: 20px 20px;
-}
-.ctf-nav-list {
-    display: inline-block;
-    list-style-type: none;
-    margin: 0 10px;
-}
-.ctf-nav-list-elem {
-    display: inline-block;
-    margin: 0 10px;
-}
-.ctf-nav-list-elem a, .ctf-nav-link {
-    color: white;
-    font-size: 1.1rem;
-    text-decoration: none;
-}
-.router-link-active {
-    color: lightgreen !important;
-}
+
 </style>

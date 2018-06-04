@@ -1,14 +1,14 @@
 <template>
     <div class="ctf-login">
-        <h3>Log in</h3>
-        <div class='ctf-form-error' v-show="showError">Error: {{ error }}</div>
-        <form class='ctf-form' @submit.prevent="handleSubmit">
-            <p>Username:</p>
-            <input v-model='username' type='text' name='username' required><br>
-            <p>Password:</p>
-            <input v-model='password' type='password' name='password' required><br>
-            <button type='submit'>Submit</button>
-        </form>
+        <div class='ctf-centered'>
+            <h3 class='ctf-login-header'>Log in</h3>
+            <div class='ctf-form-error' v-show="showError">Error: {{ error }}</div>
+            <form class='ctf-form' @submit.prevent="handleSubmit">
+                <input class='ctf-input' size="40" v-model='username' type='text' required placeholder="Username">
+                <input class='ctf-input' size="40" v-model='password' type='password' required placeholder="Password">
+                <button class='ctf-form-button'>Submit</button>
+            </form>
+        </div>
     </div>
 </template>
 

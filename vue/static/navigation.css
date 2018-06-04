@@ -1,0 +1,34 @@
+.ctf-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0E0030;
+}
+
+.ctf-nav-logo {
+    display: inline-block;
+    margin: 20px 20px;
+    color: white;
+}
+
+.ctf-nav-list {
+    display: inline-block;
+    list-style-type: none;
+    margin: 0 10px;
+}
+
+.ctf-nav-list-elem {
+    display: inline-block;
+}
+
+.ctf-nav-list-elem a, .ctf-nav-link {
+    color: white;
+    font-size: 1.1rem;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.router-link-active {
+    color: red !important;
+}

@@ -1,16 +1,15 @@
 <template>
-    <div class='ctf-register'>
-        <h3>Registration</h3>
-        <div class='ctf-form-error' v-show="showError">Error: {{ error }}</div>
-        <form class='ctf-form' @submit.prevent="handleSubmit">
-            <p>Username:</p>
-            <input v-model='username' type='text' name='username' required><br>
-            <p>Password:</p>
-            <input v-model='password' type='password' name='password' required><br>
-            <p>Repeat password:</p>
-            <input v-model='repeatPassword' type='password' name='repeatpassword' required><br><br>
-            <button type='submit'>Submit</button>
-        </form>
+    <div class="ctf-login">
+        <div class='ctf-centered'>
+            <h3 class='ctf-login-header'>Sign up</h3>
+            <div class='ctf-form-error' v-show="showError">Error: {{ error }}</div>
+            <form class='ctf-form' @submit.prevent="handleSubmit">
+                <input class='ctf-input' size="40" v-model='username' type='text' required placeholder="Username">
+                <input class='ctf-input' size="40" v-model='password' type='password' required placeholder="Password">
+                <input class='ctf-input' size="40" v-model='repeatPassword' type='password' required placeholder="Repeat password">
+                <button class='ctf-form-button'>Submit</button>
+            </form>
+        </div>
     </div>
 </template>
 
