@@ -24,6 +24,9 @@ const store = new Vuex.Store({
         isAnonymous: state => {
             return state.user_status === "anonymous"
         },
+        isAuthenticated: state => {
+                return state.user_status != "anonymous"
+        },
         isDefaultUser: state => {
             return state.user_status === "user"
         },
