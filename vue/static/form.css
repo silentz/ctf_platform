@@ -1,0 +1,54 @@
+
+.ctf-login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: max-content;
+    margin-bottom: 50px;
+}
+
+.ctf-centered {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.ctf-input {
+    display: block;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    outline: none;
+    font-size: 1rem;
+    margin: 15px 0;
+}
+
+.ctf-form-button {
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: inherit;
+    margin: 0;
+    background-color: #067D13;
+    font-size: 1.1rem;
+    color: white;
+    outline: none;
+}
+
+.ctf-login-header {
+    display: block;
+    font-size: 2.2rem;
+    margin-top: 0;
+}
+
+.ctf-form-error {
+    color: red;
+}
