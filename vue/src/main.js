@@ -33,6 +33,9 @@ const store = new Vuex.Store({
     }
 })
 
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+axios.defaults.xsrfCookieName = 'csrftoken'
+
 new Vue({
     el: '#app',
     store: store,
