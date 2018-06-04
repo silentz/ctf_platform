@@ -1,29 +1,27 @@
 <template>
-    <div class='ctf-register'>
-        <h3>Registration</h3>
+    <div class="ctf-login">
+        <h3>Log in</h3>
         <div class='ctf-form-error' v-show="showError">Error: {{ error }}</div>
         <form class='ctf-form' @submit.prevent="handleSubmit">
             <p>Username:</p>
             <input v-model='username' type='text' name='username' required><br>
             <p>Password:</p>
             <input v-model='password' type='password' name='password' required><br>
-            <p>Repeat password:</p>
-            <input v-model='repeatPassword' type='password' name='repeatpassword' required><br><br>
             <button type='submit'>Submit</button>
         </form>
     </div>
 </template>
 
+
 <script>
 import axios from 'axios'
 
 export default {
-    name: 'register',
+    name: 'login',
     data: function () {
         return {
             username: '',
             password: '',
-            repeatPassword: '',
             showError: false,
             error: ''
         }
@@ -37,29 +35,35 @@ export default {
             this.showError = false
         },
         handleSubmit() {
-            if (this.repeatPassword != this.password) {
-                this.printError("Passwords are not equal!")
-            } else {
-                this.disableError()
-                this.registerUser()
-            }
+            this.disableError()
+            this.loginUser()
         },
-        registerUser() {
-            axios.post("/api/auth/register/", {
+        updateVuex() {
+            axios.get("/api/auth/status/").then(response => {
+                this.$store.commit('setUserStatus', response.data.status)
+                this.$store.commit('setUsername', response.data.username)
+            }).catch(error => {
+                // pass
+            })
+        },
+        loginUser() {
+            axios.post("/api/auth/login/", {
                 username: this.username,
                 password: this.password
             }).then(response => {
+                this.updateVuex()
                 this.username = ""
                 this.password = ""
                 this.$router.push('/')
             }).catch(err => {
-                this.printError('This username is already taken!')
+                console.log(err.response)
+                this.printError('Login or password wrong!')
             })
         }
     }
 }
 </script>
 
-<style lang='scss'>
+<style lang="scss">
 
 </style>

@@ -9,11 +9,13 @@
 <script>
 import VueRouter from 'vue-router'
 import RegisterComponent from './components/register.vue'
+import LoginComponent from './components/login.vue'
 
 let router = new VueRouter({
     mode: 'history',
     routes: [
-        {path: '/register', component: RegisterComponent}
+        {path: '/register', component: RegisterComponent},
+        {path: '/login', component: LoginComponent}
     ]
 })
 
