@@ -162,6 +162,24 @@ class PermissionViewSet(viewsets.ModelViewSet):
     serializer_class = PermissionSerializer
 
 
+class UserStatusView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request, format=None):
+        if request.user.is_anonymous:
+            return Response(
+                {"status": "anonymous", "username": ""},
+                status=status.HTTP_200_OK
+            )
+        else:
+            username = request.user.username
+            user_status = "admin" if request.user.is_staff else "user"
+            return Response(
+                {"status": user_status, "username": username},
+                status=status.HTTP_200_OK
+            )
+
+
 class UserLogoutAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
