@@ -10,14 +10,19 @@ import VueRouter from 'vue-router'
 import RegisterComponent from './components/register.vue'
 import LoginComponent from './components/login.vue'
 import NavComponent from './components/navigation.vue'
-import PlatfromComponent from './components/platform.vue'
+import PlatfromComponent, {PlatformRoutes} from './components/platform.vue'
 
 let router = new VueRouter({
     mode: 'history',
     routes: [
         {path: '/register', component: RegisterComponent, name: 'register'},
         {path: '/login', component: LoginComponent, name: 'login'},
-        {path: '/platform', component: PlatfromComponent, name: 'platfrom'}
+        {
+            path: '/platform',
+            component: PlatfromComponent,
+            name: 'platfrom',
+            children: PlatformRoutes
+        }
     ]
 })
 

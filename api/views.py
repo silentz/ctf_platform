@@ -44,13 +44,24 @@ class TaskViewSet(viewsets.ModelViewSet):
 
 class ContestViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly, IsAdminOrContestOpen, IsAuthenticated)
-    queryset = Contest.objects.all()
+    queryset = Contest.objects.filter(training=False)
 
     def get_serializer_class(self):
         if self.action == 'list':
             return ContestListSerializer
         else:
             return ContestSerializer
+
+
+class TrainingViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAdminOrReadOnly, IsAuthenticated)
+    queryset = Contest.objects.filter(training=True)
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return TrainingListSerializer
+        else:
+            return TrainingSerializer
 
 
 class TaskFileViewSet(viewsets.ModelViewSet):
