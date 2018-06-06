@@ -53,18 +53,6 @@ class ContestSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'name', 'start_datetime', 'finish_datetime', 'tasks', 'allowed_groups', 'messages')
 
 
-class TrainingListSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Contest
-        fields = ('url', 'name', 'allowed_groups', 'messages')
-
-
-class TrainingSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Contest
-        fields = ('url', 'name', 'allowed_groups', 'messages', 'tasks')
-
-
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Category

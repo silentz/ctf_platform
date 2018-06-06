@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register('categories', views.CategoryViewSet)
-router.register('contests', views.ContestViewSet)
+router.register('contests', views.ContestViewSet, base_name='contest')
 router.register('files', views.TaskFileViewSet)
 router.register('groups', views.GroupViewSet)
 router.register('permissions', views.PermissionViewSet)
@@ -12,7 +12,6 @@ router.register('tasks', views.TaskViewSet)
 router.register('users', views.UserViewSet)
 router.register('hints', views.HintViewSet)
 router.register('messages', views.MessageViewSet)
-router.register('trainings', views.TrainingViewSet)
 
 urlpatterns = [
     *router.urls,
