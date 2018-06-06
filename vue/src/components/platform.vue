@@ -8,7 +8,9 @@
                 <li class='ctf-sidebar-list-item'>
                     <router-link :to="{ name: 'trainings' }">Тренировки</router-link>
                 </li>
-                <li class='ctf-sidebar-list-item'>Контесты</li>
+                <li class='ctf-sidebar-list-item'>
+                    <router-link :to="{ name: 'contests' }">Контесты</router-link>
+                </li>
                 <li class='ctf-sidebar-list-item'>Личный кабинет</li>
                 <li class='ctf-sidebar-list-item'>Группы</li>
                 <li class='ctf-sidebar-list-item'>Скорборд</li>
@@ -23,9 +25,11 @@
 <script>
 import VueRouter from 'vue-router'
 import TrainingComponent from './training.vue'
+import ContestComponent from './contest.vue'
 
 export let PlatformRoutes = [
-    {path: 'trainings', component: TrainingComponent, name: 'trainings'}
+    {path: 'trainings', component: TrainingComponent, name: 'trainings'},
+    {path: 'contests', component: ContestComponent, name: 'contests'}
 ]
 
 export default {
