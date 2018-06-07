@@ -1,13 +1,13 @@
 <template>
-    <div class="ctf-login">
-        <div class='ctf-centered'>
-            <h3 class='ctf-login-header'>Sign up</h3>
-            <div class='ctf-form-error' v-show="showError">Error: {{ error }}</div>
-            <form class='ctf-form' @submit.prevent="handleSubmit">
-                <input class='ctf-input' size="40" v-model='username' type='text' required placeholder="Username">
-                <input class='ctf-input' size="40" v-model='password' type='password' required placeholder="Password">
-                <input class='ctf-input' size="40" v-model='repeatPassword' type='password' required placeholder="Repeat password">
-                <button class='ctf-form-button'>Submit</button>
+    <div class="ctf-auth">
+        <div class='centered'>
+            <h3>Sign up</h3>
+            <div class='error' v-show="showError">Error: {{ error }}</div>
+            <form @submit.prevent="handleSubmit">
+                <input size="40" v-model='username' type='text' required placeholder="Username">
+                <input size="40" v-model='password' type='password' required placeholder="Password">
+                <input size="40" v-model='repeatPassword' type='password' required placeholder="Repeat password">
+                <button>Submit</button>
             </form>
         </div>
     </div>
@@ -60,5 +60,5 @@ export default {
 </script>
 
 <style lang='scss'>
-
+@import '../assets/style/auth.scss';
 </style>

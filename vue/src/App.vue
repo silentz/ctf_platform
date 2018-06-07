@@ -14,6 +14,8 @@ import PlatfromComponent, {PlatformRoutes} from './components/platform.vue'
 
 let router = new VueRouter({
     mode: 'history',
+    linkActiveClass: 'link-active',
+    linkExactActiveClass: 'link-active',
     routes: [
         {path: '/register', component: RegisterComponent, name: 'register'},
         {path: '/login', component: LoginComponent, name: 'login'},
@@ -41,5 +43,34 @@ export default {
 </script>
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css?family=Ubuntu');
 
+$background-color: #e1e1e1;
+$global-font: 'Ubuntu', sans-serif;
+$navigation-bar-height: 60px;
+
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: $background-color;
+    font-family: $global-font;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    height: 100%;
+}
+
+#app {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-rows: $navigation-bar-height auto;
+    grid-template-columns: auto;
+    grid-row-gap: 0;
+    grid-column-gap: 0;
+}
 </style>

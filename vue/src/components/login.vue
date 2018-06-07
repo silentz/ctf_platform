@@ -1,12 +1,12 @@
 <template>
-    <div class="ctf-login">
-        <div class='ctf-centered'>
-            <h3 class='ctf-login-header'>Log in</h3>
-            <div class='ctf-form-error' v-show="showError">Error: {{ error }}</div>
-            <form class='ctf-form' @submit.prevent="handleSubmit">
-                <input class='ctf-input' size="40" v-model='username' type='text' required placeholder="Username">
-                <input class='ctf-input' size="40" v-model='password' type='password' required placeholder="Password">
-                <button class='ctf-form-button'>Submit</button>
+    <div class="ctf-auth">
+        <div class='centered'>
+            <h3>Log in</h3>
+            <div class='error' v-show="showError">Error: {{ error }}</div>
+            <form @submit.prevent="handleSubmit">
+                <input size="40" v-model='username' type='text' required placeholder="Username">
+                <input size="40" v-model='password' type='password' required placeholder="Password">
+                <button>Submit</button>
             </form>
         </div>
     </div>
@@ -65,5 +65,5 @@ export default {
 </script>
 
 <style lang="scss">
-
+@import '../assets/style/auth.scss';
 </style>

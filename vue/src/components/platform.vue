@@ -1,22 +1,22 @@
 <template lang="html">
-    <div class="ctf-platform">
-        <div class="ctf-sidebar">
-            <h3 class='ctf-sidebar-username'>{{ username }}</h3>
-            <hr class='ctf-sidebar-delimiter'>
-            <ul class='ctf-sidebar-list'>
-                <li class='ctf-sidebar-list-item'>Новости</li>
-                <li class='ctf-sidebar-list-item'>
-                    <router-link :to="{ name: 'trainings' }">Тренировки</router-link>
+    <div class="platform">
+        <div class="sidebar">
+            <h3 class='username'>{{ username }}</h3>
+            <hr class='delimiter'>
+            <ul class='list'>
+                <li class='item'>Новости</li>
+                <li class='item'>
+                    <router-link class='link' :to="{ name: 'trainings' }">Тренировки</router-link>
                 </li>
-                <li class='ctf-sidebar-list-item'>
-                    <router-link :to="{ name: 'contests' }">Контесты</router-link>
+                <li class='item'>
+                    <router-link class='link' :to="{ name: 'contests' }">Контесты</router-link>
                 </li>
-                <li class='ctf-sidebar-list-item'>Личный кабинет</li>
-                <li class='ctf-sidebar-list-item'>Группы</li>
-                <li class='ctf-sidebar-list-item'>Скорборд</li>
+                <li class='item'>Личный кабинет</li>
+                <li class='item'>Группы</li>
+                <li class='item'>Скорборд</li>
             </ul>
         </div>
-        <div class="ctf-screen">
+        <div class="screen">
             <router-view></router-view>
         </div>
     </div>
@@ -42,5 +42,54 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="scss">
+
+.platform {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+
+    .screen {
+        flex-grow: 1;
+    }
+
+    .sidebar {
+        color: white;
+        background-color: #222222;
+        width: 200px;
+        padding: 10px;
+
+        .username {
+            text-align: center;
+            margin: 15px;
+        }
+
+        .delimiter {
+            border-color: #444444;
+        }
+
+        .list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .item {
+            background-color: #333333;
+            margin: 5px 0;
+            padding: 10px 10px;
+            border-radius: 3px;
+            font-size: 0.9rem;
+
+            .link {
+                text-decoration: none;
+                color: white;
+            }
+
+            .link-active {
+                color: yellow;
+            }
+        }
+    }
+}
+
 </style>
