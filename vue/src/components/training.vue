@@ -1,9 +1,9 @@
 <template lang="html">
-    <div class="ctf-items">
-        <div class="ctf-contest-item" v-for="training in trainings">
-            <div class='ctf-contest-item-data'>
-                <h3 class='ctf-contest-item-label'>{{ training.name }}</h3>
-                <p class='ctf-contest-item-time'>
+    <div class="contests">
+        <div class="item" v-for="training in trainings">
+            <div class='data'>
+                <h3 class='name'>{{ training.name }}</h3>
+                <p class='time'>
                     &#128336; c 15:00 10.10.2010 до 16:00 11.11.2011
                 </p>
             </div>
@@ -31,5 +31,6 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="scss">
+@import '../assets/style/contest.scss';
 </style>
