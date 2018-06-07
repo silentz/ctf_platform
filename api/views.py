@@ -52,10 +52,13 @@ class ContestViewSet(viewsets.ModelViewSet):
             return ContestSerializer
 
     def get_queryset(self):
-        if self.request.query_params.get('training', None) == 'true':
-            return Contest.objects.filter(training=True).all()
+        if self.action == 'list':
+            if self.request.query_params.get('training', None) == 'true':
+                return Contest.objects.filter(training=True).all()
+            else:
+                return Contest.objects.filter(training=False).all()
         else:
-            return Contest.objects.filter(training=False).all()
+            return Contest.objects.all()
 
 
 class TaskFileViewSet(viewsets.ModelViewSet):

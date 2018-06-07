@@ -10,6 +10,8 @@ $contest-border-radius: 5px;
         margin: 10px;
         border-radius: $contest-border-radius;
         background-color: white;
+        text-decoration: none;
+        color: black;
 
         &:before {
             content: "";
