@@ -11,7 +11,9 @@
                 <li class='item'>
                     <router-link class='link' :to="{ name: 'contests' }">Контесты</router-link>
                 </li>
-                <li class='item'>Личный кабинет</li>
+                <li class='item'>
+                    <router-link class='link' :to="{ name: 'account' }">Личный кабинет</router-link>
+                </li>
                 <li class='item'>Группы</li>
                 <li class='item'>Скорборд</li>
             </ul>
@@ -26,10 +28,12 @@
 import VueRouter from 'vue-router'
 import TrainingComponent from './training.vue'
 import ContestComponent from './contest.vue'
+import AccountComponent from './account.vue'
 
 export let PlatformRoutes = [
     {path: 'trainings', component: TrainingComponent, name: 'trainings'},
-    {path: 'contests', component: ContestComponent, name: 'contests'}
+    {path: 'contests', component: ContestComponent, name: 'contests'},
+    {path: 'account', component: AccountComponent, name: 'account'}
 ]
 
 export default {
