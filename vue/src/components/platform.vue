@@ -29,10 +29,12 @@ import VueRouter from 'vue-router'
 import TrainingComponent from './training.vue'
 import ContestComponent from './contest.vue'
 import AccountComponent from './account.vue'
+import ContestDetailComponent from './contest_detail.vue'
 
 export let PlatformRoutes = [
     {path: 'trainings', component: TrainingComponent, name: 'trainings'},
     {path: 'contests', component: ContestComponent, name: 'contests'},
+    {path: 'contest/:id', component: ContestDetailComponent, name: 'contest_detail'},
     {path: 'account', component: AccountComponent, name: 'account'}
 ]
 
@@ -60,8 +62,9 @@ export default {
     .sidebar {
         color: white;
         background-color: #222222;
-        width: 200px;
+        min-width: 200px;
         padding: 10px;
+        box-sizing: border-box;
 
         .username {
             text-align: center;

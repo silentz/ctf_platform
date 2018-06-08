@@ -4,65 +4,65 @@ from api.models import *
 from api.permissions import *
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'url', 'groups')
+        fields = ('id', 'username', 'groups')
 
 
-class GroupCreateSerializer(serializers.HyperlinkedModelSerializer):
+class GroupCreateSerializer(serializers.ModelSerializer):
     invite_code = serializers.CharField(max_length=512)
 
     class Meta:
         model = Group
-        fields = ('name', 'url', 'invite_code')
+        fields = ('id', 'name', 'invite_code')
 
 
-class GroupAdminSerializer(serializers.HyperlinkedModelSerializer):
+class GroupAdminSerializer(serializers.ModelSerializer):
     invite_code = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
-        fields = ('name', 'url', 'invite_code')
+        fields = ('id', 'name', 'invite_code')
 
     def get_invite_code(self, obj):
         return obj.options.invite_code
 
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ('name', 'url')
+        fields = ('id', 'name', 'url')
 
 
-class PermissionSerializer(serializers.HyperlinkedModelSerializer):
+class PermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permission
-        fields = ('url', 'name',)
+        fields = ('id', 'name',)
 
 
-class ContestListSerializer(serializers.HyperlinkedModelSerializer):
+class ContestListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contest
-        fields = ('url', 'name', 'start_datetime', 'finish_datetime', 'allowed_groups')
+        fields = ('id', 'name', 'start_datetime', 'finish_datetime', 'allowed_groups')
 
 
-class ContestSerializer(serializers.HyperlinkedModelSerializer):
+class ContestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contest
-        fields = ('url', 'name', 'start_datetime', 'finish_datetime', 'tasks', 'allowed_groups', 'messages')
+        fields = ('id', 'name', 'start_datetime', 'finish_datetime', 'tasks', 'allowed_groups', 'messages')
 
 
-class CategorySerializer(serializers.HyperlinkedModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
 
 
-class TaskFileCreateSerializer(serializers.HyperlinkedModelSerializer):
+class TaskFileCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskFile
-        fields = ('url', 'file', 'task')
+        fields = ('id', 'file', 'task')
 
     def create(self, validated_data):
         name = validated_data['file'].name
@@ -71,49 +71,71 @@ class TaskFileCreateSerializer(serializers.HyperlinkedModelSerializer):
         return TaskFile.objects.create(task=task, name=name, file=file)
 
 
-class TaskFileListSerializer(serializers.HyperlinkedModelSerializer):
+class TaskFileListSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskFile
-        fields = ('url',)
+        fields = ('id', 'url',)
 
 
-class TaskFileSerializer(serializers.HyperlinkedModelSerializer):
+class TaskFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskFile
-        fields = ('url', 'task', 'name')
+        fields = ('id', 'task', 'name')
 
 
-class TaskSerializer(serializers.HyperlinkedModelSerializer):
+class TaskSerializer(serializers.ModelSerializer):
+    category_name = serializers.SerializerMethodField()
+    solved = serializers.SerializerMethodField()
+
     class Meta:
         model = Task
-        fields = ('url', 'name', 'score', 'description', 'contest', 'category', 'files', 'hints')
+        fields = ('id', 'name', 'score', 'description', 'contest',
+            'category', 'files', 'hints', 'category_name', 'solved')
+
+    def get_category_name(self, obj):
+        return obj.category.name
+
+    def get_solved(self, obj):
+        user = self.context['request'].user
+        return TaskSolved.objects.filter(user=user, task=obj).exists()
 
 
-class TaskAdminSerializer(serializers.HyperlinkedModelSerializer):
+class TaskAdminSerializer(serializers.ModelSerializer):
+    category_name = serializers.SerializerMethodField()
+    solved = serializers.SerializerMethodField()
+
     class Meta:
         model = Task
-        fields = ('url', 'name', 'score', 'description', 'contest', 'category', 'files', 'flag', 'hints')
+        fields = ('id', 'name', 'score', 'description', 'contest', 'category',
+                  'files', 'flag', 'hints', 'category_name', 'solved')
+
+    def get_category_name(self, obj):
+        return obj.category.name
+
+    def get_solved(self, obj):
+        user = self.context['request'].user
+        return TaskSolved.objects.filter(user=user, task=obj).exists()
 
 
-class MessageListSerializer(serializers.HyperlinkedModelSerializer):
+class MessageListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ('url', 'contest')
+        fields = ('id', 'contest')
 
 
-class MessageSerializer(serializers.HyperlinkedModelSerializer):
+class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ('url', 'contest', 'text')
+        fields = ('id', 'contest', 'text')
 
 
-class HintListSerializer(serializers.HyperlinkedModelSerializer):
+class HintListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hint
-        fields = ('url', 'task')
+        fields = ('id', 'task')
 
 
-class HintSerializer(serializers.HyperlinkedModelSerializer):
+class HintSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hint
-        fields = ('url', 'task', 'text')
+        fields = ('id', 'task', 'text')

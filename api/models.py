@@ -16,6 +16,9 @@ class Category(models.Model):
 
 
 class Task(models.Model):
+    class Meta:
+        ordering = ('score',)
+
     name = models.CharField(max_length=512)
     score = models.IntegerField()
     description = models.TextField()  # TODO: markdown support
