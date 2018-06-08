@@ -48,16 +48,9 @@ class ContestListSerializer(serializers.ModelSerializer):
 
 
 class ContestSerializer(serializers.ModelSerializer):
-    categories = serializers.SerializerMethodField()
-
     class Meta:
         model = Contest
-        fields = ('id', 'name', 'start_datetime', 'finish_datetime',
-                  'tasks', 'allowed_groups', 'messages', 'categories')
-
-    def get_categories(self, obj):
-        result = set([task.category.id for task in obj.tasks.all()])
-        return list(result)
+        fields = ('id', 'name', 'start_datetime', 'finish_datetime', 'tasks', 'allowed_groups', 'messages')
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -91,15 +84,37 @@ class TaskFileSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    category_name = serializers.SerializerMethodField()
+    solved = serializers.SerializerMethodField()
+
     class Meta:
         model = Task
-        fields = ('id', 'name', 'score', 'description', 'contest', 'category', 'files', 'hints')
+        fields = ('id', 'name', 'score', 'description', 'contest',
+            'category', 'files', 'hints', 'category_name', 'solved')
+
+    def get_category_name(self, obj):
+        return obj.category.name
+
+    def get_solved(self, obj):
+        user = self.context['request'].user
+        return TaskSolved.objects.filter(user=user, task=obj).exists()
 
 
 class TaskAdminSerializer(serializers.ModelSerializer):
+    category_name = serializers.SerializerMethodField()
+    solved = serializers.SerializerMethodField()
+
     class Meta:
         model = Task
-        fields = ('id', 'name', 'score', 'description', 'contest', 'category', 'files', 'flag', 'hints')
+        fields = ('id', 'name', 'score', 'description', 'contest', 'category',
+                  'files', 'flag', 'hints', 'category_name', 'solved')
+
+    def get_category_name(self, obj):
+        return obj.category.name
+
+    def get_solved(self, obj):
+        user = self.context['request'].user
+        return TaskSolved.objects.filter(user=user, task=obj).exists()
 
 
 class MessageListSerializer(serializers.ModelSerializer):
