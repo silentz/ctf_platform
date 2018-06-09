@@ -9,6 +9,15 @@ class Contest(models.Model):
     finish_datetime = models.DateTimeField(null=True)
     allowed_groups = models.ManyToManyField(Group, related_name='allowed_contests', blank=True)
 
+    def scoreboard(self):
+        entries = TaskSolved.objects.filter(task__contest=self)
+        users = {entry.user for entry in entries}
+        result = []
+        for user in users:
+            score = sum([entry.task.score for entry in entries.filter(user=user)])
+            result.append({'username': user.username, 'score': score})
+        return result
+
 
 class Category(models.Model):
     name = models.CharField(max_length=512)

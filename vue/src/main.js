@@ -2,12 +2,15 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import VModal from 'vue-js-modal'
+import {Tabs, Tab} from 'vue-tabs-component'
 import App from './App.vue'
 import axios from 'axios'
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
 Vue.use(VModal)
+Vue.component('tabs', Tabs)
+Vue.component('tab', Tab)
 
 const store = new Vuex.Store({
     state: {

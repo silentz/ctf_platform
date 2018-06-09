@@ -60,6 +60,10 @@ class ContestViewSet(viewsets.ModelViewSet):
         else:
             return Contest.objects.all()
 
+    @action(methods=['get'], detail=True)
+    def scoreboard(self, request, pk, *args, **kwargs):
+        return Response(self.get_object().scoreboard())
+
 
 class TaskFileViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrParentTaskOpen, IsAdminOrReadOnly, IsAuthenticated)

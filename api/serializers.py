@@ -90,7 +90,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ('id', 'name', 'score', 'description', 'contest',
-            'category', 'files', 'hints', 'category_name', 'solved')
+                  'category', 'files', 'hints', 'category_name', 'solved')
 
     def get_category_name(self, obj):
         return obj.category.name

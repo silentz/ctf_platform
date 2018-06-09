@@ -82,6 +82,9 @@ export default {
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
 
+$task-width: 120px;
+$task-height: 80px;
+
 .solved {
     background-color: #2FCF39 !important;
 }
@@ -91,18 +94,21 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 120px;
-    height: 80px;
-    background-color: white;
+    width: $task-width;
+    height: $task-height;
+    background-color: #e1e1e1;
+    color: black;
     border-radius: 5px;
     margin: 5px;
 
     .score {
         font-size: 1.6rem;
+        user-select: none;
     }
 
     .category {
         font-size: 1rem;
+        user-select: none;
     }
 }
 
