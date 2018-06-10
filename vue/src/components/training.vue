@@ -4,9 +4,6 @@
             :to="{ name: 'contest_detail', params: {id: training.id} }">
             <div class='data'>
                 <h3 class='name'>{{ training.name }}</h3>
-                <p class='time'>
-                    &#128336; c 15:00 10.10.2010 до 16:00 11.11.2011
-                </p>
             </div>
         </router-link>
     </div>

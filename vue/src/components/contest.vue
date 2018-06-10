@@ -5,7 +5,8 @@
                 <div class='data'>
                     <h3 class='name'>{{ contest.name }}</h3>
                     <p class='time'>
-                        &#128336; c 15:00 10.10.2010 до 16:00 11.11.2011
+                        &#128336; c {{ getReadableDate(contest.start_datetime) }}
+                                 до {{ getReadableDate(contest.finish_datetime) }}
                     </p>
                 </div>
         </router-link>
@@ -14,12 +15,18 @@
 
 <script>
 import axios from 'axios'
+import dateFormat from 'dateformat'
 
 export default {
     name: 'Contests',
     data: function() {
         return {
             contests: []
+        }
+    },
+    methods: {
+        getReadableDate(datestring) {
+            return dateFormat(new Date(datestring), "HH:MM:ss dd.mm.yyyy")
         }
     },
     created: function() {
