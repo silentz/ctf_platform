@@ -10,6 +10,9 @@
             <tab name='Скорборд'>
                 <contest-scoreboard></contest-scoreboard>
             </tab>
+            <tab name='Уведомления'>
+                <notifications></notifications>
+            </tab>
         </tabs>
     </div>
 </template>
@@ -18,12 +21,14 @@
 import axios from 'axios'
 import TaskComponent from './task.vue'
 import ScoreboardContestComponent from './contest_scoreboard.vue'
+import NotificationsComponent from './notifications.vue'
 
 export default {
     name: "ContestDetail",
     components: {
         task: TaskComponent,
-        'contest-scoreboard': ScoreboardContestComponent
+        'contest-scoreboard': ScoreboardContestComponent,
+        notifications: NotificationsComponent
     },
     data: function() {
         return {

@@ -60,7 +60,10 @@ class Hint(models.Model):
 
 
 class Message(models.Model):
+    class Meta:
+        ordering = ('-time',)
     contest = models.ForeignKey(Contest, related_name='messages', on_delete=models.CASCADE)
+    time = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
 
 

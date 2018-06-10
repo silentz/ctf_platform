@@ -20,11 +20,15 @@ new Vue({
     store: VuexStore,
     render: h => h(App),
     created: function() {
-        axios.get("/api/auth/status/").then(response => {
-            this.$store.commit('setUserStatus', response.data.status)
-            this.$store.commit('setUsername', response.data.username)
-        }).catch(error => {
-            // pass
-        })
+        // need SYNCHRONOUS request to set status
+        // axios doesn't let to do them :D
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', '/api/auth/status/', false)
+        xhr.send()
+        if (xhr.status == 200) {
+            let data = JSON.parse(xhr.responseText)
+            this.$store.commit('setUserStatus', data.status)
+            this.$store.commit('setUsername', data.username)
+        }
     }
 })

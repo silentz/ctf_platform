@@ -104,6 +104,10 @@ class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
 
+    def get_queryset(self):
+        contest_id = self.request.query_params.get('for', None)
+        return Message.objects.filter(contest__id=contest_id)
+
     def get_serializer_class(self):
         if self.action == 'list':
             return MessageListSerializer

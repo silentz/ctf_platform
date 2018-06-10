@@ -120,13 +120,13 @@ class TaskAdminSerializer(serializers.ModelSerializer):
 class MessageListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ('id', 'contest')
+        fields = ('id', 'contest', 'time', 'text')
 
 
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ('id', 'contest', 'text')
+        fields = ('id', 'contest', 'text', 'time')
 
 
 class HintListSerializer(serializers.ModelSerializer):
