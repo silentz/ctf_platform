@@ -4,7 +4,9 @@
             <h3 class='username'>{{ username }}</h3>
             <hr class='delimiter'>
             <ul class='list'>
-                <li class='item'>Новости</li>
+                <li class='item'>
+                    <router-link class='link' :to="{ name: 'news' }">Новости</router-link>
+                </li>
                 <li class='item'>
                     <router-link class='link' :to="{ name: 'trainings' }">Тренировки</router-link>
                 </li>
@@ -32,14 +34,16 @@ import TrainingComponent from './training.vue'
 import ContestComponent from './contest.vue'
 import AccountComponent from './account.vue'
 import ContestDetailComponent from './contest_detail.vue'
-import Scoreboard from './scoreboard.vue'
+import ScoreboardComponent from './scoreboard.vue'
+import NewsComponent from './news.vue'
 
 export let PlatformRoutes = [
     {path: 'trainings', component: TrainingComponent, name: 'trainings'},
     {path: 'contests', component: ContestComponent, name: 'contests'},
     {path: 'contest/:id', component: ContestDetailComponent, name: 'contest_detail'},
     {path: 'account', component: AccountComponent, name: 'account'},
-    {path: 'scoreboard', component: Scoreboard, name: 'scoreboard'}
+    {path: 'scoreboard', component: ScoreboardComponent, name: 'scoreboard'},
+    {path: 'news', component: NewsComponent, name: 'news'}
 ]
 
 export default {
@@ -94,6 +98,7 @@ export default {
             .link {
                 text-decoration: none;
                 color: white;
+                user-select: none;
             }
 
             .link-active {

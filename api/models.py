@@ -70,3 +70,10 @@ class Message(models.Model):
 class GroupAdditional(models.Model):
     group = models.OneToOneField(Group, related_name='options', on_delete=models.CASCADE)
     invite_code = models.CharField(max_length=512)
+
+
+class News(models.Model):
+    class Meta:
+        ordering = ('-time',)
+    time = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()

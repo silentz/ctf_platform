@@ -139,3 +139,9 @@ class HintSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hint
         fields = ('id', 'task', 'text')
+
+
+class NewsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = News
+        fields = ('id', 'text', 'time')
