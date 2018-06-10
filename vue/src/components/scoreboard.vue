@@ -1,5 +1,5 @@
 <template lang="html">
-    <div class='contest-scoreboard'>
+    <div class='scoreboard'>
         <table cellspacing="0" cellpadding="0">
             <thead>
                 <th>Позиция</th>
@@ -21,8 +21,7 @@
 import axios from 'axios'
 
 export default {
-    name: "ContestScoreboard",
-    props: ['contest_id'],
+    name: "Scoreboard",
     data: function() {
         return {
             results: []
@@ -30,8 +29,7 @@ export default {
     },
     methods: {
         loadScoreboard() {
-            axios.get(`/api/contests/${this.$route.params.id}/scoreboard/`)
-            .then(response => {
+            axios.get('/api/scoreboard/').then(response => {
                 this.results = response.data.sort((a, b) => {
                     if (a.score > b.score)
                         return -1
@@ -42,7 +40,7 @@ export default {
             })
         }
     },
-    created: function () {
+    created: function() {
         this.loadScoreboard()
         setInterval(this.loadScoreboard, 1000 * 60 * 3)
     }
@@ -50,14 +48,15 @@ export default {
 </script>
 
 <style lang="scss">
+.scoreboard {
+    padding: 40px;
 
-.contest-scoreboard {
     table {
         width: 100%;
         border: none;
 
         thead {
-            background-color: #e1e1e1;
+            background-color: white;
 
             th {
                 text-align: left;
@@ -69,21 +68,21 @@ export default {
 
         tbody {
             tr {
+                border: none;
+
                 &:nth-child(even) {
-                    background-color: lightgreen;
+                    background-color: white;
                 }
 
                 &:nth-child(odd) {
-                    background-color: white;
+                    background-color: lightgreen;
                 }
 
                 td {
                     padding: 5px 10px;
                 }
             }
-
         }
     }
 }
-
 </style>

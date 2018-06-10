@@ -62,7 +62,7 @@ class ContestViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=True)
     def scoreboard(self, request, pk, *args, **kwargs):
-        return Response(self.get_object().scoreboard())
+        return Response(self.get_object().scoreboard(), status=status.HTTP_200_OK)
 
 
 class TaskFileViewSet(viewsets.ModelViewSet):
@@ -172,6 +172,18 @@ class PermissionViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly, IsAuthenticated)
     queryset = Permission.objects.all()
     serializer_class = PermissionSerializer
+
+
+class ScoreboardView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, format=None):
+        users = set([entry.user for entry in TaskSolved.objects.all()])
+        result = []
+        for user in users:
+            user_score = sum([entry.task.score for entry in TaskSolved.objects.filter(user=user)])
+            result.append({'username': user.username, 'score': user_score})
+        return Response(result, status=status.HTTP_200_OK)
 
 
 class UserStatusView(APIView):
