@@ -18,5 +18,6 @@ urlpatterns = [
     path('auth/login/', views.UserLoginAPIView.as_view(), name='login'),
     path('auth/register/', views.UserRegistrationAPIView.as_view(), name='register'),
     path('auth/logout/', views.UserLogoutAPIView.as_view(), name='logout'),
-    path('auth/status/', views.UserStatusView.as_view(), name='status')
+    path('auth/status/', views.UserStatusView.as_view(), name='status'),
+    path('scoreboard/', views.ScoreboardView.as_view(), name='scoreboard'),
 ]

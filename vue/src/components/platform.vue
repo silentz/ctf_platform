@@ -15,7 +15,9 @@
                     <router-link class='link' :to="{ name: 'account' }">Личный кабинет</router-link>
                 </li>
                 <li class='item'>Группы</li>
-                <li class='item'>Скорборд</li>
+                <li class='item'>
+                    <router-link class='link' :to="{ name: 'scoreboard' }">Скорборд</router-link>
+                </li>
             </ul>
         </div>
         <div class="screen">
@@ -30,12 +32,14 @@ import TrainingComponent from './training.vue'
 import ContestComponent from './contest.vue'
 import AccountComponent from './account.vue'
 import ContestDetailComponent from './contest_detail.vue'
+import Scoreboard from './scoreboard.vue'
 
 export let PlatformRoutes = [
     {path: 'trainings', component: TrainingComponent, name: 'trainings'},
     {path: 'contests', component: ContestComponent, name: 'contests'},
     {path: 'contest/:id', component: ContestDetailComponent, name: 'contest_detail'},
-    {path: 'account', component: AccountComponent, name: 'account'}
+    {path: 'account', component: AccountComponent, name: 'account'},
+    {path: 'scoreboard', component: Scoreboard, name: 'scoreboard'}
 ]
 
 export default {
