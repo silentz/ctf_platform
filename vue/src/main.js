@@ -5,48 +5,19 @@ import VModal from 'vue-js-modal'
 import {Tabs, Tab} from 'vue-tabs-component'
 import App from './App.vue'
 import axios from 'axios'
+import VuexStore from './store.js'
 
 Vue.use(VueRouter)
-Vue.use(Vuex)
 Vue.use(VModal)
 Vue.component('tabs', Tabs)
 Vue.component('tab', Tab)
-
-const store = new Vuex.Store({
-    state: {
-        username: "",
-        user_status: "anonymous",
-    },
-    mutations: {
-        setUserStatus(state, status) {
-            state.user_status = status
-        },
-        setUsername(state, username) {
-            state.username = username
-        }
-    },
-    getters: {
-        isAnonymous: state => {
-            return state.user_status === "anonymous"
-        },
-        isAuthenticated: state => {
-                return state.user_status != "anonymous"
-        },
-        isDefaultUser: state => {
-            return state.user_status === "user"
-        },
-        isAdmin: state => {
-            return state.user_status === "admin"
-        }
-    }
-})
 
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 axios.defaults.xsrfCookieName = 'csrftoken'
 
 new Vue({
     el: '#app',
-    store: store,
+    store: VuexStore,
     render: h => h(App),
     created: function() {
         axios.get("/api/auth/status/").then(response => {

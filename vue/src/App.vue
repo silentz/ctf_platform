@@ -11,21 +11,37 @@ import RegisterComponent from './components/register.vue'
 import LoginComponent from './components/login.vue'
 import NavComponent from './components/navigation.vue'
 import PlatfromComponent, {PlatformRoutes} from './components/platform.vue'
+import VuexStore from './store.js'
 
 let router = new VueRouter({
     mode: 'history',
     linkActiveClass: 'link-active',
     linkExactActiveClass: 'link-active',
     routes: [
+        {path: '/', redirect: '/platform', name: 'root'},
         {path: '/register', component: RegisterComponent, name: 'register'},
         {path: '/login', component: LoginComponent, name: 'login'},
         {
             path: '/platform',
             component: PlatfromComponent,
             name: 'platfrom',
-            children: PlatformRoutes
+            children: PlatformRoutes,
+            meta: {requiresAuth: true}
         }
     ]
+})
+
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        console.log(VuexStore.getters.isAuthenticated)
+        if (VuexStore.getters.isAuthenticated) {
+            next()
+        } else {
+            next({ path: '/login' })
+        }
+    } else {
+        next()
+    }
 })
 
 export default {

@@ -38,12 +38,13 @@ export default {
             this.disableError()
             this.loginUser()
         },
-        updateVuex() {
+        updateVuexAndRedirect() {
             axios.get("/api/auth/status/").then(response => {
                 this.$store.commit('setUserStatus', response.data.status)
                 this.$store.commit('setUsername', response.data.username)
+                this.$router.push('/')
             }).catch(error => {
-                // pass
+                this.$router.push('/')
             })
         },
         loginUser() {
@@ -51,12 +52,10 @@ export default {
                 username: this.username,
                 password: this.password
             }).then(response => {
-                this.updateVuex()
                 this.username = ""
                 this.password = ""
-                this.$router.push('/')
+                this.updateVuexAndRedirect()
             }).catch(err => {
-                console.log(err.response)
                 this.printError('Login or password wrong!')
             })
         }

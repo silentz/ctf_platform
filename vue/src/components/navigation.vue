@@ -1,7 +1,9 @@
 
 <template>
     <nav class='ctf-nav'>
-        <h1 class='logo'>CTFPro</h1>
+        <h1 class='logo'>
+            <router-link :to="{ name: 'root' }">CTFPro</router-link>
+        </h1>
         <ul class='list'>
             <template v-if="isAuthenticated">
                 <li>
@@ -64,10 +66,11 @@ export default {
     align-items: center;
     background-color: #12355b;
 
-    .logo {
+    .logo a {
         display: inline-block;
         margin: 20px 20px;
         color: white;
+        text-decoration: none;
     }
 
     .list {
