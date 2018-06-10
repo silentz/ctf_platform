@@ -115,6 +115,12 @@ class MessageViewSet(viewsets.ModelViewSet):
             return MessageSerializer
 
 
+class NewsViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAdminOrReadOnly, IsAuthenticated)
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
+
+
 class CategoryViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly, IsAuthenticated)
     queryset = Category.objects.all()

@@ -12,6 +12,7 @@ router.register('tasks', views.TaskViewSet)
 router.register('users', views.UserViewSet)
 router.register('hints', views.HintViewSet)
 router.register('messages', views.MessageViewSet)
+router.register('news', views.NewsViewSet)
 
 urlpatterns = [
     *router.urls,
