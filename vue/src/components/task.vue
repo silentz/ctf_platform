@@ -7,6 +7,9 @@
                         <div class='cross' @click.stop="hideTask()">&#x2715;</div>
                         <h2>{{ task.name }} ({{ task.category_name }}, {{ task.score }})</h2>
                         <p>{{ task.description }}</p>
+                        <p v-for="(hint, index) in hints" class='hint'>
+                            Hint {{ index + 1 }}: {{ hint.text }}
+                        </p>
                         <div class='files' v-if="this.files.length > 0">
                             <h3>Файлы:</h3>
                             <ul>
@@ -48,6 +51,7 @@ export default {
         return {
             flag: '',
             files: [],
+            hints: [],
             mistake: false
         }
     },
@@ -56,6 +60,12 @@ export default {
             let file_id = this.task.files[index]
             axios.get(`/api/files/${file_id}/`).then(response => {
                 this.files.push(response.data)
+            })
+        }
+        for (let index in this.task.hints) {
+            let hint_id = this.task.hints[index]
+            axios.get(`/api/hints/${hint_id}/`).then(response => {
+                this.hints.push(response.data)
             })
         }
     },
@@ -135,6 +145,10 @@ $task-height: 80px;
         align-items: flex-start;
         height: 100%;
         box-sizing: border-box;
+
+        .hint {
+            margin: 3px 0;
+        }
 
         .files {
             margin: 10px 0;
