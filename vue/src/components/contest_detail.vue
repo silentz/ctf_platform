@@ -59,59 +59,7 @@ export default {
 </script>
 
 <style lang="scss">
-
-.tabs-component {
-    .tabs-component-panels {
-        background-color: #fff;
-        border: solid 1px #ddd;
-        padding: 40px;
-    }
-
-    .tabs-component-tabs {
-        border-radius: 6px;
-        border: 0;
-        align-items: stretch;
-        display: flex;
-        justify-content: flex-start;
-        margin-bottom: -1px;
-        padding-left: 40px;
-    }
-
-    .tabs-component-tab {
-        color: #999;
-        font-size: 14px;
-        font-weight: 600;
-        margin-right: 0;
-        list-style: none;
-        background-color: #fff;
-        border: solid 1px #ddd;
-        border-radius: 3px 3px 0 0;
-        margin-right: 8px;
-
-        &.is-active {
-            color: #000;
-            border-bottom: solid 1px #fff;
-            z-index: 2;
-        }
-
-        .tabs-component-tab-a {
-            align-items: center;
-            color: inherit;
-            display: flex;
-            padding: 11px 14px;
-            text-decoration: none;
-        }
-
-        .is-disabled * {
-            color: #cdcdcd;
-            cursor: not-allowed !important;
-        }
-
-        &:hover {
-          color: #666;
-        }
-    }
-}
+@import '../assets/style/tabs.scss';
 
 .contest {
     .board {

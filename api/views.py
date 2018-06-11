@@ -32,6 +32,12 @@ class TaskViewSet(viewsets.ModelViewSet):
             self.permission_classes = [IsAdminOrParentContestOpen, IsAdminOrReadOnly, IsAuthenticated]
         return super(TaskViewSet, self).get_permissions()
 
+    @action(methods=['get'], detail=False)
+    def solved(self, request):
+        result = [entry.task for entry in request.user.solved_tasks.all()]
+        serialized = TaskSerializer(result, context={'request': request}, many=True).data
+        return Response(serialized, status=status.HTTP_200_OK)
+
     @action(methods=['post'], detail=True)
     def pass_flag(self, request, pk):
         obj = self.get_object()
@@ -212,6 +218,21 @@ class UserStatusView(APIView):
                 {"status": user_status, "username": username},
                 status=status.HTTP_200_OK
             )
+
+
+class UserPasswordChangeView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, format=None):
+        old_password = request.data.get('old_password', None)
+        new_password = request.data.get('new_password', None)
+
+        if request.user.check_password(old_password) and new_password is not None:
+            request.user.set_password(new_password)
+            request.user.save()
+            return Response({'status': 'ok'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'status': 'bad'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserLogoutAPIView(APIView):

@@ -20,5 +20,6 @@ urlpatterns = [
     path('auth/register/', views.UserRegistrationAPIView.as_view(), name='register'),
     path('auth/logout/', views.UserLogoutAPIView.as_view(), name='logout'),
     path('auth/status/', views.UserStatusView.as_view(), name='status'),
+    path('auth/change/', views.UserPasswordChangeView.as_view(), name="change_password"),
     path('scoreboard/', views.ScoreboardView.as_view(), name='scoreboard'),
 ]
