@@ -25,7 +25,7 @@
                         <p v-show="mistake" class='form-mistake'>Неверный флаг</p>
                         <p v-show="task.solved" class='form-solved'>Верно!</p>
                         <div class='fields' v-if='!task.solved'>
-                            <input size="40" v-model='flag' type='text' required placeholder="Flag">
+                            <input v-model='flag' type='text' required placeholder="Flag">
                             <button type='submit'>Check</button>
                         </div>
                     </form>
@@ -181,6 +181,7 @@ $task-height: 80px;
             flex-direction: row;
             justify-content: space-between;
             align-items: stretch;
+            max-width: 100%;
 
             input {
                 outline: none;

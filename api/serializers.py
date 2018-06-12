@@ -50,7 +50,7 @@ class ContestListSerializer(serializers.ModelSerializer):
 class ContestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contest
-        fields = ('id', 'name', 'start_datetime', 'finish_datetime', 'tasks', 'allowed_groups', 'messages')
+        fields = ('id', 'name', 'start_datetime', 'training', 'finish_datetime', 'tasks', 'allowed_groups', 'messages')
 
 
 class CategorySerializer(serializers.ModelSerializer):
