@@ -70,7 +70,7 @@ export default {
     .sidebar {
         color: white;
         background-color: #222222;
-        min-width: 200px;
+        min-width: 15%;
         padding: 10px;
         box-sizing: border-box;
 
