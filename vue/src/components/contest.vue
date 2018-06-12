@@ -26,7 +26,7 @@ export default {
     },
     methods: {
         getReadableDate(datestring) {
-            return dateFormat(new Date(datestring), "HH:MM:ss dd.mm.yyyy")
+            return dateFormat(new Date(datestring), "HH:MM dd.mm.yyyy")
         }
     },
     created: function() {

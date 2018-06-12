@@ -20,19 +20,28 @@ class GroupCreateSerializer(serializers.ModelSerializer):
 
 class GroupAdminSerializer(serializers.ModelSerializer):
     invite_code = serializers.SerializerMethodField()
+    inside = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
-        fields = ('id', 'name', 'invite_code')
+        fields = ('id', 'name', 'invite_code', 'inside')
 
     def get_invite_code(self, obj):
         return obj.options.invite_code
 
+    def get_inside(self, obj):
+        return self.context['request'].user.groups.filter(id=obj.id).exists()
+
 
 class GroupSerializer(serializers.ModelSerializer):
+    inside = serializers.SerializerMethodField()
+
     class Meta:
         model = Group
-        fields = ('id', 'name', 'url')
+        fields = ('id', 'name', 'inside')
+
+    def get_inside(self, obj):
+        return self.context['request'].user.groups.filter(id=obj.id).exists()
 
 
 class PermissionSerializer(serializers.ModelSerializer):

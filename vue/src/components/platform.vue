@@ -16,7 +16,9 @@
                 <li class='item'>
                     <router-link class='link' :to="{ name: 'account' }">Личный кабинет</router-link>
                 </li>
-                <li class='item'>Группы</li>
+                <li class='item'>
+                    <router-link class='link' :to="{ name: 'groups' }">Группы</router-link>
+                </li>
                 <li class='item'>
                     <router-link class='link' :to="{ name: 'scoreboard' }">Скорборд</router-link>
                 </li>
@@ -36,6 +38,7 @@ import AccountComponent from './account.vue'
 import ContestDetailComponent from './contest_detail.vue'
 import ScoreboardComponent from './scoreboard.vue'
 import NewsComponent from './news.vue'
+import GroupsComponent from './groups.vue'
 
 export let PlatformRoutes = [
     {path: 'trainings', component: TrainingComponent, name: 'trainings'},
@@ -43,7 +46,8 @@ export let PlatformRoutes = [
     {path: 'contest/:id', component: ContestDetailComponent, name: 'contest_detail'},
     {path: 'account', component: AccountComponent, name: 'account'},
     {path: 'scoreboard', component: ScoreboardComponent, name: 'scoreboard'},
-    {path: 'news', component: NewsComponent, name: 'news'}
+    {path: 'news', component: NewsComponent, name: 'news'},
+    {path: 'grousp', component: GroupsComponent, name: 'groups'}
 ]
 
 export default {
