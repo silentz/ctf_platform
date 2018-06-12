@@ -21,7 +21,6 @@ class Contest(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=512)
-    color = models.CharField(max_length=7)  # format: #RRGGBB
 
 
 class Task(models.Model):
