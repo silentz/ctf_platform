@@ -27,9 +27,9 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'pass_flag':
-            self.permission_classes = [IsAdminOrParentContestOpen, IsAuthenticated]
+            self.permission_classes = [IsAdminOrParentContestAllowed, IsAdminOrParentContestOpen, IsAuthenticated]
         else:
-            self.permission_classes = [IsAdminOrParentContestOpen, IsAdminOrReadOnly, IsAuthenticated]
+            self.permission_classes = [IsAdminOrParentContestAllowed, IsAdminOrParentContestOpen, IsAdminOrReadOnly, IsAuthenticated]
         return super(TaskViewSet, self).get_permissions()
 
     @action(methods=['get'], detail=False)
@@ -49,7 +49,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 
 
 class ContestViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAdminOrReadOnly, IsAdminOrContestOpen, IsAuthenticated)
+    permission_classes = (IsAdminOrContestAllowed, IsAdminOrReadOnly, IsAdminOrContestOpen, IsAuthenticated)
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -72,7 +72,7 @@ class ContestViewSet(viewsets.ModelViewSet):
 
 
 class TaskFileViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAdminOrParentTaskOpen, IsAdminOrReadOnly, IsAuthenticated)
+    permission_classes = (IsAdminOrParentTaskAllowed, IsAdminOrParentTaskOpen, IsAdminOrReadOnly, IsAuthenticated)
     queryset = TaskFile.objects.all()
 
     def get_serializer_class(self):
@@ -94,7 +94,7 @@ class TaskFileViewSet(viewsets.ModelViewSet):
 
 
 class HintViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAdminOrParentTaskOpen, IsAdminOrReadOnly, IsAuthenticated)
+    permission_classes = (IsAdminOrParentTaskAllowed, IsAdminOrParentTaskOpen, IsAdminOrReadOnly, IsAuthenticated)
     queryset = Hint.objects.all()
     serializer_class = HintSerializer
 
@@ -106,19 +106,17 @@ class HintViewSet(viewsets.ModelViewSet):
 
 
 class MessageViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAdminOrParentContestOpen, IsAdminOrReadOnly, IsAuthenticated)
+    permission_classes = (IsAdminOrTargetContestAllowed, IsAdminOrTargetContestOpen, IsAdminOrParentContestOpen,
+                          IsAdminOrReadOnly, IsAuthenticated)
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
 
     def get_queryset(self):
         contest_id = self.request.query_params.get('for', None)
-        return Message.objects.filter(contest__id=contest_id)
-
-    def get_serializer_class(self):
-        if self.action == 'list':
-            return MessageListSerializer
+        if contest_id is None:
+            return []
         else:
-            return MessageSerializer
+        	return Message.objects.filter(contest__id=contest_id)
 
 
 class NewsViewSet(viewsets.ModelViewSet):
@@ -182,12 +180,6 @@ class GroupViewSet(viewsets.ModelViewSet):
             return Response({'status': 'ok'}, status=status.HTTP_200_OK)
         else:
             return Response({'status': 'wrong invite code'}, status=status.HTTP_403_FORBIDDEN)
-
-
-class PermissionViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAdminOrReadOnly, IsAuthenticated)
-    queryset = Permission.objects.all()
-    serializer_class = PermissionSerializer
 
 
 class ScoreboardView(APIView):

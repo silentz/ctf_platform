@@ -8,6 +8,9 @@
                         &#128336; c {{ getReadableDate(contest.start_datetime) }}
                                  до {{ getReadableDate(contest.finish_datetime) }}
                     </p>
+                    <p class='allowed'>Доступно для групп:
+                        <span v-for='group in contest.allowed_groups'>{{ group }}</span>
+                    </p>
                 </div>
         </router-link>
     </div>

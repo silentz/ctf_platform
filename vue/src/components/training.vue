@@ -4,6 +4,9 @@
             :to="{ name: 'contest_detail', params: {id: training.id} }">
             <div class='data'>
                 <h3 class='name'>{{ training.name }}</h3>
+                <p class='allowed'>Доступно для групп:
+                    <span v-for='group in training.allowed_groups'>{{ group }}</span>
+                </p>
             </div>
         </router-link>
     </div>

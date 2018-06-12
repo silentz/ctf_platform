@@ -44,16 +44,15 @@ class GroupSerializer(serializers.ModelSerializer):
         return self.context['request'].user.groups.filter(id=obj.id).exists()
 
 
-class PermissionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Permission
-        fields = ('id', 'name',)
-
-
 class ContestListSerializer(serializers.ModelSerializer):
+    allowed_groups = serializers.SerializerMethodField()
+
     class Meta:
         model = Contest
         fields = ('id', 'name', 'start_datetime', 'finish_datetime', 'allowed_groups')
+
+    def get_allowed_groups(self, obj):
+        return [group.name for group in obj.allowed_groups.all()]
 
 
 class ContestSerializer(serializers.ModelSerializer):
@@ -124,12 +123,6 @@ class TaskAdminSerializer(serializers.ModelSerializer):
     def get_solved(self, obj):
         user = self.context['request'].user
         return TaskSolved.objects.filter(user=user, task=obj).exists()
-
-
-class MessageListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Message
-        fields = ('id', 'contest', 'time', 'text')
 
 
 class MessageSerializer(serializers.ModelSerializer):
