@@ -3,7 +3,7 @@
         <h2 class='header'>Администрирование</h2>
         <tabs>
             <tab name='Новости'>
-
+                <news-manager></news-manager>
             </tab>
             <tab name='Контесты'>
 
@@ -20,11 +20,13 @@
 
 <script>
 import GroupManager from './groups.vue'
+import NewsManager from './news.vue'
 
 export default {
     name: 'AdminBase',
     components: {
-        'group-manager': GroupManager
+        'group-manager': GroupManager,
+        'news-manager': NewsManager
     }
 }
 </script>
