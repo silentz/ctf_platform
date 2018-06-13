@@ -5,7 +5,7 @@ from django.contrib.auth.models import User, Group
 class Contest(models.Model):
     name = models.CharField(max_length=512, blank=True, null=True)
     training = models.BooleanField(default=True)
-    start_datetime = models.DateTimeField()
+    start_datetime = models.DateTimeField(null=True)
     finish_datetime = models.DateTimeField(null=True)
     allowed_groups = models.ManyToManyField(Group, related_name='allowed_contests', blank=True)
 

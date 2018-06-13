@@ -24,7 +24,7 @@
             <div class='edit-wrapper'>
                 <h2>Редактировать контест</h2>
                 <form @submit.prevent="updateContest">
-                    <input size="30" type='text' v-model='name' placeholder='Имя группы' required>
+                    <input size="30" type='text' v-model='name' placeholder='Название контеста' required>
                     <datetime v-model='start_datetime' type='datetime' placeholder='Время начала'></datetime>
                     <datetime v-model='finish_datetime' type='datetime' placeholder='Время конца'></datetime>
                     <select v-model='allowed_groups' multiple size='7'>
