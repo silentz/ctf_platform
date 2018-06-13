@@ -6,7 +6,7 @@
                 <news-manager></news-manager>
             </tab>
             <tab name='Контесты'>
-
+                <contests-manager></contests-manager>
             </tab>
             <tab name='Тренировки'>
 
@@ -21,12 +21,14 @@
 <script>
 import GroupManager from './groups.vue'
 import NewsManager from './news.vue'
+import ContestManager from './contests.vue'
 
 export default {
     name: 'AdminBase',
     components: {
         'group-manager': GroupManager,
-        'news-manager': NewsManager
+        'news-manager': NewsManager,
+        'contests-manager': ContestManager
     }
 }
 </script>
