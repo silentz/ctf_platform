@@ -12,16 +12,20 @@
 
             </tab>
             <tab name='Группы'>
-
+                <group-manager></group-manager>
             </tab>
         </tabs>
     </div>
 </template>
 
 <script>
+import GroupManager from './groups.vue'
 
 export default {
-    name: 'AdminBase'
+    name: 'AdminBase',
+    components: {
+        'group-manager': GroupManager
+    }
 }
 </script>
 
