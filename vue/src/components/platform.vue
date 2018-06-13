@@ -22,6 +22,9 @@
                 <li class='item'>
                     <router-link class='link' :to="{ name: 'scoreboard' }">Скорборд</router-link>
                 </li>
+                <li class='item' v-if='isAdmin'>
+                    <router-link class='link' :to="{ name: 'admin-root'}">Администрирование</router-link>
+                </li>
             </ul>
         </div>
         <div class="screen">
@@ -55,6 +58,9 @@ export default {
     computed: {
         username: function() {
             return this.$store.state.username;
+        },
+        isAdmin: function() {
+            return this.$store.getters.isAdmin;
         }
     }
 }
