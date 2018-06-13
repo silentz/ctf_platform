@@ -161,7 +161,8 @@ class GroupViewSet(viewsets.ModelViewSet):
             return Response({'status': 'group already exists'}, status=status.HTTP_400_BAD_REQUEST)
         group = Group.objects.create(name=name)
         GroupAdditional.objects.create(group=group, invite_code=invite_code)
-        return Response({'status': 'ok'}, status=status.HTTP_201_CREATED)
+        serialized = GroupAdminSerializer(group, context={'request': request}).data
+        return Response(serialized, status=status.HTTP_201_CREATED)
 
     def update(self, request, pk, partial=False):
         invite_code = request.data.get('invite_code', None)
