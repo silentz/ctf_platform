@@ -45,20 +45,27 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class ContestListSerializer(serializers.ModelSerializer):
-    allowed_groups = serializers.SerializerMethodField()
+    allowed_groups_names = serializers.SerializerMethodField()
 
     class Meta:
         model = Contest
-        fields = ('id', 'name', 'start_datetime', 'finish_datetime', 'allowed_groups')
+        fields = ('id', 'name', 'start_datetime', 'finish_datetime',
+                  'allowed_groups', 'allowed_groups_names')
 
-    def get_allowed_groups(self, obj):
+    def get_allowed_groups_names(self, obj):
         return [group.name for group in obj.allowed_groups.all()]
 
 
 class ContestSerializer(serializers.ModelSerializer):
+    allowed_groups_names = serializers.SerializerMethodField()
+
     class Meta:
         model = Contest
-        fields = ('id', 'name', 'start_datetime', 'training', 'finish_datetime', 'tasks', 'allowed_groups', 'messages')
+        fields = ('id', 'name', 'start_datetime', 'training', 'finish_datetime',
+                  'tasks', 'allowed_groups', 'messages', 'allowed_groups_names')
+
+    def get_allowed_groups_names(self, obj):
+        return [group.name for group in obj.allowed_groups.all()]
 
 
 class CategorySerializer(serializers.ModelSerializer):

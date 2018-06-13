@@ -2,6 +2,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import VModal from 'vue-js-modal'
+import VDatetime from 'vue-datetime'
+import 'vue-datetime/dist/vue-datetime.css'
+
 import {Tabs, Tab} from 'vue-tabs-component'
 import App from './App.vue'
 import axios from 'axios'
@@ -9,6 +12,7 @@ import VuexStore from './store.js'
 
 Vue.use(VueRouter)
 Vue.use(VModal)
+Vue.use(VDatetime)
 Vue.component('tabs', Tabs)
 Vue.component('tab', Tab)
 
