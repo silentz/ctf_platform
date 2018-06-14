@@ -7,6 +7,13 @@
             <span v-for='group in contest.allowed_groups_names'>{{ group }} </span>
         </td>
         <td>
+            
+            <router-link :to='{name: "edit_contest", params: {id: contest.id}}'>
+                <button>
+                    &#x21B3;
+                </button>
+            </router-link>
+            
             <button @click='$modal.show("edit-contest" + contest.id)'>&#9998;</button>
             <button @click='$modal.show("delete-contest" + contest.id)'>&#x2715;</button>
         </td>

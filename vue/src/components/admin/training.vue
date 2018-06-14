@@ -5,6 +5,11 @@
             <span v-for='group in training.allowed_groups_names'>{{ group }} </span>
         </td>
         <td>
+            <router-link :to='{name: "edit_contest", params: {id: training.id}}'>
+                <button>
+                    &#x21B3;
+                </button>
+            </router-link>
             <button @click='$modal.show("edit-training" + training.id)'>&#9998;</button>
             <button @click='$modal.show("delete-training" + training.id)'>&#x2715;</button>
         </td>

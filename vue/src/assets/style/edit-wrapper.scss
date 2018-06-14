@@ -30,8 +30,10 @@
         }
         select {
             display: block;
-            width: 70%;
             outline: none;
+            font-size: 1rem;
+            padding: 2px;
+            margin: 6px 0;
         }
         button {
             outline: none;
