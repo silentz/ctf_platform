@@ -2,7 +2,6 @@
     <div class='contest-detail'>
         <h2 class='header'>Редактировать контест: {{ contest.name }}</h2>
         <tabs>
-            
             <tab name='Таски'>
                 <modal name="task-create" height='auto'>
                     <div class='modal-wrapper'>
@@ -35,7 +34,25 @@
                 </table>
             </tab>
             <tab name='Уведомления'>
-
+                <modal name="message-create" height='auto'>
+                    <div class='modal-wrapper'>
+                        <form @submit.prevent="postMessage">
+                            <h3>Создать уведомление</h3>
+                            <textarea v-model='message' cols='50' rows='10' placeholder="Текст" required></textarea>
+                            <button @click='$modal.hide("message-create")'>Создать</button>
+                        </form>
+                    </div> 
+                </modal>
+                <button class='create-task-button' @click="createMessage()">Создать уведомление</button>
+                <table cellpadding="0" cellspacing="0">
+                    <thead>
+                        <th>Текст</th>
+                        <th>Операции</th>
+                    </thead>
+                    <tbody>
+                        <message class='message-entry' v-for='msg in messages' :key='msg.id' :message='msg'></message>
+                    </tbody>
+                </table>
             </tab>
         </tabs>
     </div>
@@ -44,11 +61,15 @@
 <script>
 import axios from 'axios'
 import TaskComponent from './task.vue'
+import MessageComponent from './message.vue'
 
 export default {
     name: 'ContestAdminEdit',
     data: function() {
         return {
+            messages: [],
+            message: "",
+
             contest: {},
             tasks: [],
             categories: [],
@@ -74,6 +95,18 @@ export default {
                 this.tasks.push(response.data)
             })
         },
+        postMessage() {
+            axios.post(`/api/messages/?for=${this.contest.id}`, {
+                contest: this.contest.id,
+                text: this.message
+            }).then(response => {
+                this.messages.unshift(response.data)
+            })
+        },
+        createMessage() {
+            this.message = ""
+            this.$modal.show('message-create')
+        },
         showCreate() {
             this.name = ""
             this.score = 0
@@ -92,13 +125,18 @@ export default {
                     this.tasks.push(response.data)
                 })
             }
+            axios.get(`/api/messages/?for=${this.contest.id}`).then(response => {
+                this.messages = response.data
+            })
         })
         axios.get('/api/categories/').then(response => {
             this.categories = response.data
         })
+        
     },
     components: {
-        task: TaskComponent
+        task: TaskComponent,
+        message: MessageComponent
     }
 }
 </script>
