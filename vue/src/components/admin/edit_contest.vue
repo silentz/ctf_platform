@@ -196,7 +196,7 @@ export default {
             padding: 4px;
         }
 
-        .task-entry {
+        .task-entry, .message-entry {
 
             &:nth-child(even) {
                 background-color: white;
