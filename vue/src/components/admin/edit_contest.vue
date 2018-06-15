@@ -2,7 +2,25 @@
     <div class='contest-detail'>
         <h2 class='header'>Редактировать контест: {{ contest.name }}</h2>
         <tabs>
+            
             <tab name='Таски'>
+                <modal name="task-create" height='auto'>
+                    <div class='modal-wrapper'>
+                        <form @submit.prevent="postTask">
+                            <h3>Создать таск</h3>
+                            <input v-model='name' size="30" placeholder='Название таска' required>
+                            <input type='number' v-model='score' size='30' placeholder="Очки" required>
+                            <select v-model='category'>
+                                <option v-for='cat in categories' :key='cat.id' :value="cat.id">{{ cat.name }}</option>
+                            </select>
+                            <input v-model='flag' size="30" placeholder="Флаг" required>
+                            <textarea v-model='description' cols='50' rows='10' placeholder="Описание" required></textarea>
+                            
+                            <button @click='$modal.hide("task-create")'>Создать</button>
+                        </form>
+                    </div>
+                </modal>
+                <button class='create-task-button' @click='showCreate()'>Создать таск</button>
                 <table cellpadding="0" cellspacing="0">
                     <thead>
                         <th>Название</th>
@@ -32,7 +50,37 @@ export default {
     data: function() {
         return {
             contest: {},
-            tasks: []
+            tasks: [],
+            categories: [],
+            name: "",
+            score: 0,
+            description: "",
+            flag: "",
+            category: 1
+        }
+    },
+    methods: {
+        postTask() {
+            axios.post('/api/tasks/', {
+                name: this.name,
+                category: this.category,
+                flag: this.flag,
+                description: this.description,
+                score: this.score,
+                files: [],
+                hints: [],
+                contest: this.contest.id
+            }).then(response => {
+                this.tasks.push(response.data)
+            })
+        },
+        showCreate() {
+            this.name = ""
+            this.score = 0
+            this.description = ""
+            this.flag = ""
+            this.category = 1
+            this.$modal.show('task-create')
         }
     },
     created: function() {
@@ -44,6 +92,9 @@ export default {
                     this.tasks.push(response.data)
                 })
             }
+        })
+        axios.get('/api/categories/').then(response => {
+            this.categories = response.data
         })
     },
     components: {
@@ -58,6 +109,41 @@ export default {
 .contest-detail {
     .header {
         padding: 10px 40px;
+    }
+
+    .create-task-button {
+        margin-bottom: 20px;
+    }
+
+    .modal-wrapper {
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #222222;
+        color: white;
+
+        form {
+            h3 {
+                font-size: 1.5rem;
+            }
+            input, select, textarea {
+                display: block;
+                margin: 5px 0;
+                font-size: 1rem;
+                outline: none;
+                padding: 6px;
+                border: none;
+            }
+            button {
+                outline: none;
+                border: none;
+                font-size: 1rem;
+                background-color: lightgreen;
+                padding: 5px;
+                margin-top: 10px;
+            }
+        }
     }
 
     table {

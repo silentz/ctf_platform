@@ -25,7 +25,7 @@ class Category(models.Model):
 
 class Task(models.Model):
     class Meta:
-        ordering = ('score',)
+        ordering = ('score', 'id')
 
     name = models.CharField(max_length=512)
     score = models.IntegerField()

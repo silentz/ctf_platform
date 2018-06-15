@@ -58,7 +58,18 @@ export default {
     },
     methods: {
         updateTask() {
-           
+            axios.put(`/api/tasks/${this.task.id}/`, {
+                name: this.name,
+                category: this.category,
+                score: this.score,
+                description: this.description,
+                flag: this.flag,
+                files: this.task.files,
+                hints: this.task.hints,
+                contest: this.task.contest
+            }).then(response => {
+                this.task = response.data
+            })
         },
         deleteTask() {
             axios.delete(`/api/tasks/${this.task.id}/`).then(reponse => {
