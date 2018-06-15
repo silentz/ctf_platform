@@ -54,6 +54,8 @@ class TaskFile(models.Model):
 
 
 class Hint(models.Model):
+    class Meta:
+        ordering = ('id',)
     task = models.ForeignKey(Task, related_name='hints', on_delete=models.CASCADE)
     text = models.TextField()
 

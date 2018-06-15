@@ -24,6 +24,16 @@
                 </table>
             </tab>
             <tab name='Хинты'>
+                <modal name="hint-create" height='auto'>
+                    <div class='modal-wrapper'>
+                        <form @submit.prevent="postHint">
+                            <h3>Добавить хинт</h3>
+                            <textarea cols="60" rows='10' v-model='text' placeholder="Текст" required></textarea>
+                            <button @click='$modal.hide("hint-create")'>Создать</button>
+                        </form>
+                    </div>
+                </modal>
+                <button class='create-button' @click='$modal.show("hint-create"); text=""'>Добавить хинт</button>
                 <table cellpadding="0" cellspacing="0">
                     <thead>
                         <th>Текст</th>
@@ -41,6 +51,7 @@
 <script>
 import axios from 'axios'
 import FileComponent from './file.vue'
+import HintComponent from './hint.vue'
 
 export default {
     name: 'AdminTaskEdit',
@@ -49,10 +60,19 @@ export default {
             task: {},
             hints: [],
             files: [],
-            file: undefined
+            file: undefined,
+            text: ""
         }
     },
     methods: {
+        postHint() {
+            axios.post(`/api/hints/`, {
+                task: this.task.id,
+                text: this.text
+            }).then(response => {
+                this.hints.push(response.data)
+            })
+        },
         postFile() {
             let formData = new FormData()
             formData.append('task', this.task.id)
@@ -91,7 +111,8 @@ export default {
         })
     },
     components: {
-        'file': FileComponent
+        'file': FileComponent,
+        'hint': HintComponent
     }
 }
 </script>
