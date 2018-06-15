@@ -6,6 +6,9 @@
         <td class='flag'>{{ task.flag }}</td>
         
         <td>
+            <router-link :to='{name: "edit_task", params: {id: task.id}}'>
+                <button>&#x21B3;</button>
+            </router-link>
             <button @click='$modal.show("edit-task" + task.id)'>&#9998;</button>
             <button @click='$modal.show("delete-task" + task.id)'>&#x2715;</button>
         </td>

@@ -13,6 +13,7 @@ import NavComponent from './components/navigation.vue'
 import PlatfromComponent, {PlatformRoutes} from './components/platform.vue'
 import AdminBase, {AdminRoutes} from './components/admin/base.vue'
 import ContestEdit from './components/admin/edit_contest.vue'
+import TaskEdit from './components/admin/edit_task.vue'
 import VuexStore from './store.js'
 
 let router = new VueRouter({
@@ -40,6 +41,12 @@ let router = new VueRouter({
             path: '/admin/edit/:id',
             component: ContestEdit,
             name: 'edit_contest',
+            meta: {requiresAuth: true}
+        },
+        {
+            path: '/admin/edit-task/:id',
+            component: TaskEdit,
+            name: 'edit_task',
             meta: {requiresAuth: true}
         }
     ]
