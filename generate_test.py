@@ -96,7 +96,7 @@ def main():
     create_trainings(allowed_groups)
     create_tasks()
     create_users()
-    
+
 
 if __name__ == '__main__':
     os.environ["DJANGO_SETTINGS_MODULE"] = 'ctf_platform.settings'
