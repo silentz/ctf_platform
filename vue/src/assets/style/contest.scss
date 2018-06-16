@@ -1,0 +1,67 @@
+
+$contest-border-radius: 5px;
+
+.contests {
+    padding: 10px 20px;
+
+    .header {
+        margin: 15px 0;
+        margin-bottom: 20px;
+    }
+
+    .item {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: stretch;
+        margin: 10px;
+        border-radius: $contest-border-radius;
+        background-color: white;
+        text-decoration: none;
+        color: black;
+
+        &:before {
+            content: "";
+            width: 7px;
+            border-radius: $contest-border-radius 0 0 $contest-border-radius;
+            background-color: lightgreen;
+        }
+
+        &:after {
+            content: "\FF1E";
+            width: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            align-self: stretch;
+            margin-left: auto;
+            background-color: #F6F6F6;
+            font-size: 1rem;
+            border-radius: 0 $contest-border-radius $contest-border-radius 0;
+        }
+
+        .data {
+            margin: 0px;
+            padding: 10px 15px;
+
+            .name {
+                margin: 5px 0;
+            }
+
+            .allowed {
+                margin: 3px 0 0 0;
+                font-size: 0.8rem;
+
+                span {
+                    margin: 0 2px;
+                    font-style: italic;
+                }
+            }
+
+            .time {
+                margin: 0;
+                font-size: 0.8rem;
+            }
+        }
+    }
+}
