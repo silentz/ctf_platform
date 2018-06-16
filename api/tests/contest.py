@@ -4,12 +4,12 @@ from rest_framework import status
 from api.models import Contest
 from django.contrib.auth.models import User, Group
 from datetime import datetime, timedelta
-
+import pytz
 
 class ContestTests(APITestCase):
 
-    def create_instance(self, name, start_datetime, finish_datetime, allowed_groups=[]):
-        contest = Contest(name=name, start_datetime=start_datetime, finish_datetime=finish_datetime)
+    def create_instance(self, name, start_datetime, finish_datetime, allowed_groups=[], training=False):
+        contest = Contest(name=name, start_datetime=start_datetime, finish_datetime=finish_datetime, training=training)
         contest.save()
         # needs to have a value for field "id" before this many-to-many relationship can be used
         contest.allowed_groups.set(allowed_groups)
@@ -20,21 +20,26 @@ class ContestTests(APITestCase):
         user.set_password(password)
         user.is_staff = is_staff
         user.save()
+        return user
 
     def setUp(self):
-        allowed_groups = [Group.objects.create(name='TestGroup')]
+        group = Group.objects.create(name='TestGroup')
+        allowed_groups = [group]
+        self.tz = pytz.timezone('Europe/Moscow')
         # finished contest
-        self.create_instance('contest1', datetime(2000, 1, 1), datetime(2000, 1, 2), allowed_groups)
+        self.create_instance('contest1', datetime(2000, 1, 1, tzinfo=self.tz),
+                             datetime(2000, 1, 2, tzinfo=self.tz), allowed_groups)
         # not started contest
-        self.create_instance('contest2', datetime.now() + timedelta(10),
-                             datetime.now() + timedelta(20), allowed_groups)
+        self.create_instance('contest2', datetime.now(self.tz) + timedelta(10),
+                             datetime.now(self.tz) + timedelta(20), allowed_groups)
         # opened contest
-        self.create_instance('contest3', datetime(2000, 1, 1), datetime.now() + timedelta(10), allowed_groups)
+        self.create_instance('contest3', datetime(2000, 1, 1, tzinfo=self.tz),
+                             datetime.now(self.tz) + timedelta(10), allowed_groups)
         # opened training
-        self.create_instance('contest4', datetime(2000, 1, 1), None, allowed_groups)
+        self.create_instance('contest4', None, None, allowed_groups, True)
 
-        self.create_user('admin', 'admin', is_staff=True)
-        self.create_user('user', 'user', is_staff=False)
+        group.user_set.add(self.create_user('admin', 'admin', is_staff=True))
+        group.user_set.add(self.create_user('user', 'user', is_staff=False))
 
     def test_list_as_anon(self):
         url = reverse('contest-list')
@@ -47,7 +52,6 @@ class ContestTests(APITestCase):
         self.client.login(username='user', password='user')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 4)
         self.assertTrue('tasks' not in response.data[0])
 
     def test_list_as_admin(self):
@@ -55,7 +59,6 @@ class ContestTests(APITestCase):
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 4)
         self.assertTrue('tasks' not in response.data[0])
 
     def test_retrieve_as_anon(self):

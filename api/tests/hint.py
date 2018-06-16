@@ -5,14 +5,15 @@ from api.models import Contest, Task, Hint
 from django.contrib.auth.models import User, Group
 from datetime import datetime, timedelta
 import io
+import pytz
 from django.core.files import File
 
 
 class HintTests(APITestCase):
 
     def create_task(self, name, start_datetime, finish_datetime, allowed_groups, score, description,
-                    flag, category):
-        contest = Contest(name=name, start_datetime=start_datetime, finish_datetime=finish_datetime)
+                    flag, category, training):
+        contest = Contest(name=name, start_datetime=start_datetime, finish_datetime=finish_datetime, training=training)
         contest.save()
         contest.allowed_groups.set(allowed_groups)
         contest.save()
@@ -30,14 +31,15 @@ class HintTests(APITestCase):
         user.set_password(password)
         user.is_staff = is_staff
         user.save()
+        return user
 
     def setUp(self):
-        allowed_groups = [Group.objects.create(name='TestGroup')]
-        self.task = self.create_task('task4', datetime(2000, 1, 1), None,
-                                     allowed_groups, 400, 'tmp', 'tmp{tmp}', None)
+        group = Group.objects.create(name='TestGroup')
+        allowed_groups = [group]
+        self.task = self.create_task('task4', None, None, allowed_groups, 400, 'tmp', 'tmp{tmp}', None, True)
         self.create_instance(task=self.task, text='test')
-        self.create_user('admin', 'admin', is_staff=True)
-        self.create_user('user', 'user', is_staff=False)
+        group.user_set.add(self.create_user('admin', 'admin', is_staff=True))
+        group.user_set.add(self.create_user('user', 'user', is_staff=False))
 
     def test_list_as_anon(self):
         url = reverse('hint-list')
@@ -80,48 +82,42 @@ class HintTests(APITestCase):
     def test_create_as_anon(self):
         url = reverse('hint-list')
         self.client.logout()
-        task_url = reverse('task-detail', kwargs={'pk': self.task.id})
-        data = {'text': 'test2', 'task': task_url}
+        data = {'text': 'test2', 'task': self.task.id}
         response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_as_user(self):
         url = reverse('hint-list')
         self.client.login(username='user', password='user')
-        task_url = reverse('task-detail', kwargs={'pk': self.task.id})
-        data = {'text': 'test2', 'task': task_url}
+        data = {'text': 'test2', 'task': self.task.id}
         response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_as_admin(self):
         url = reverse('hint-list')
         self.client.login(username='admin', password='admin')
-        task_url = reverse('task-detail', kwargs={'pk': self.task.id})
-        data = {'text': 'test2', 'task': task_url}
+        data = {'text': 'test2', 'task': self.task.id}
         response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_update_as_anon(self):
         url = reverse('hint-detail', kwargs={'pk': 1})
         self.client.logout()
-        task_url = reverse('task-detail', kwargs={'pk': self.task.id})
-        data = {'text': 'test3', 'task': task_url}
+        data = {'text': 'test3', 'task': self.task.id}
         response = self.client.put(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_as_user(self):
         url = reverse('hint-detail', kwargs={'pk': 1})
         self.client.login(username='user', password='user')
-        task_url = reverse('task-detail', kwargs={'pk': self.task.id})
-        data = {'text': 'test3', 'task': task_url}
+        data = {'text': 'test3', 'task': self.task.id}
         response = self.client.put(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_as_admin(self):
         url = reverse('hint-detail', kwargs={'pk': 1})
         self.client.login(username='admin', password='admin')
-        task_url = reverse('task-detail', kwargs={'pk': self.task.id})
-        data = {'text': 'test3', 'task': task_url}
+        data = {'text': 'test3', 'task': self.task.id}
         response = self.client.put(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['text'], 'test3')

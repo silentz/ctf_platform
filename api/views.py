@@ -114,9 +114,9 @@ class MessageViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         contest_id = self.request.query_params.get('for', None)
         if contest_id is None:
-            return []
+            return Message.objects.none()
         else:
-        	return Message.objects.filter(contest__id=contest_id)
+            return Message.objects.filter(contest__id=contest_id)
 
 
 class NewsViewSet(viewsets.ModelViewSet):

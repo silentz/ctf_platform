@@ -108,6 +108,8 @@ class TaskSerializer(serializers.ModelSerializer):
                   'category', 'files', 'hints', 'category_name', 'solved')
 
     def get_category_name(self, obj):
+        if obj.category is None:
+            return None
         return obj.category.name
 
     def get_solved(self, obj):
@@ -125,6 +127,8 @@ class TaskAdminSerializer(serializers.ModelSerializer):
                   'files', 'flag', 'hints', 'category_name', 'solved')
 
     def get_category_name(self, obj):
+        if obj.category is None:
+            return None
         return obj.category.name
 
     def get_solved(self, obj):

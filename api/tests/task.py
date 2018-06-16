@@ -4,13 +4,13 @@ from rest_framework import status
 from api.models import Contest, Task
 from django.contrib.auth.models import User, Group
 from datetime import datetime, timedelta
-
+import pytz
 
 class TaskTests(APITestCase):
 
     def create_instance(self, name, start_datetime, finish_datetime, allowed_groups, score, description,
-                        flag, category):
-        contest = Contest(name=name, start_datetime=start_datetime, finish_datetime=finish_datetime)
+                        flag, category, training=False):
+        contest = Contest(name=name, start_datetime=start_datetime, finish_datetime=finish_datetime, training=training)
         contest.save()
         contest.allowed_groups.set(allowed_groups)
         contest.save()
@@ -23,23 +23,26 @@ class TaskTests(APITestCase):
         user.set_password(password)
         user.is_staff = is_staff
         user.save()
+        return user
 
     def setUp(self):
-        allowed_groups = [Group.objects.create(name='TestGroup')]
+        group = Group.objects.create(name='TestGroup')
+        allowed_groups = [group]
+        tz = pytz.timezone('Europe/Moscow')
         # finished contest task
-        self.create_instance('task1', datetime(2000, 1, 1), datetime(2000, 1, 2), allowed_groups,
-                             100, 'tmp', 'tmp{tmp}', None)
+        self.create_instance('task1', datetime(2000, 1, 1, tzinfo=tz), datetime(2000, 1, 2, tzinfo=tz),
+                             allowed_groups, 100, 'tmp', 'tmp{tmp}', None)
         # not started contest task
-        self.create_instance('task2', datetime.now() + timedelta(10),
-                             datetime.now() + timedelta(20), allowed_groups, 200, 'tmp', 'tmp{tmp}', None)
+        self.create_instance('task2', datetime.now(tz) + timedelta(10),
+                             datetime.now(tz) + timedelta(20), allowed_groups, 200, 'tmp', 'tmp{tmp}', None)
         # opened contest task
-        self.create_instance('task3', datetime(2000, 1, 1), datetime.now() + timedelta(10), allowed_groups,
-                             300, 'tmp', 'tmp{tmp}', None)
+        self.create_instance('task3', datetime(2000, 1, 1, tzinfo=tz), datetime.now(tz) + timedelta(10),
+                             allowed_groups, 300, 'tmp', 'tmp{tmp}', None)
         # opened training task
-        self.create_instance('task4', datetime(2000, 1, 1), None, allowed_groups, 400, 'tmp', 'tmp{tmp}', None)
+        self.create_instance('task4', None, None, allowed_groups, 400, 'tmp', 'tmp{tmp}', None, True)
 
-        self.create_user('admin', 'admin', is_staff=True)
-        self.create_user('user', 'user', is_staff=False)
+        group.user_set.add(self.create_user('admin', 'admin', is_staff=True))
+        group.user_set.add(self.create_user('user', 'user', is_staff=False))
 
     def test_list_as_anon(self):
         url = reverse('task-list')
@@ -58,7 +61,6 @@ class TaskTests(APITestCase):
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 4)
 
     def test_retrieve_as_anon(self):
         url = reverse('task-detail', kwargs={'pk': 1})

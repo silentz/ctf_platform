@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 
 class CategoryTests(APITestCase):
 
-    def create_instance(self, name, color='#FFFFFF'):
-        Category.objects.create(name=name, color=color)
+    def create_instance(self, name):
+        Category.objects.create(name=name)
 
     def create_user(self, login, password, is_staff=False):
         user = User(username=login)
@@ -19,8 +19,8 @@ class CategoryTests(APITestCase):
     def setUp(self):
         self.create_instance('test1')
         self.create_instance('test2')
-        self.create_instance('test3', '#abcdef')
-        self.create_instance('test4', '#000000')
+        self.create_instance('test3')
+        self.create_instance('test4')
         self.create_user('admin', 'admin', True)
         self.create_user('user', 'user', False)
 
@@ -67,48 +67,46 @@ class CategoryTests(APITestCase):
     def test_create_as_anon(self):
         url = reverse('category-list')
         self.client.logout()
-        data = {'name': 'test100', 'color': '#aaaaaa'}
+        data = {'name': 'test100'}
         response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_as_user(self):
         url = reverse('category-list')
         self.client.login(username='user', password='user')
-        data = {'name': 'test100', 'color': '#aaaaaa'}
+        data = {'name': 'test100'}
         response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_as_admin(self):
         url = reverse('category-list')
         self.client.login(username='admin', password='admin')
-        data = {'name': 'test100', 'color': '#aaaaaa'}
+        data = {'name': 'test100'}
         response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['name'], 'test100')
-        self.assertEqual(response.data['color'], '#aaaaaa')
 
     def test_update_as_anon(self):
         url = reverse('category-detail', kwargs={'pk': 1})
         self.client.logout()
-        data = {'name': 'new name', 'color': '#123211'}
+        data = {'name': 'new name'}
         response = self.client.put(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_as_user(self):
         url = reverse('category-detail', kwargs={'pk': 1})
         self.client.login(username='user', password='user')
-        data = {'name': 'new name', 'color': '#123211'}
+        data = {'name': 'new name'}
         response = self.client.put(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_as_admin(self):
         url = reverse('category-detail', kwargs={'pk': 1})
         self.client.login(username='admin', password='admin')
-        data = {'name': 'new name', 'color': '#123211'}
+        data = {'name': 'new name'}
         response = self.client.put(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['name'], 'new name')
-        self.assertEqual(response.data['color'], '#123211')
 
     def test_partial_update_as_anon(self):
         url = reverse('category-detail', kwargs={'pk': 1})
