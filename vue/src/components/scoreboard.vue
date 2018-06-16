@@ -1,5 +1,6 @@
 <template lang="html">
     <div class='scoreboard'>
+        <h2>Скорборд</h2>
         <table cellspacing="0" cellpadding="0">
             <thead>
                 <th>Позиция</th>
@@ -50,6 +51,11 @@ export default {
 <style lang="scss">
 .scoreboard {
     padding: 40px;
+
+    h2 {
+        margin: 0;
+        margin-bottom: 20px;
+    }
 
     table {
         width: 100%;

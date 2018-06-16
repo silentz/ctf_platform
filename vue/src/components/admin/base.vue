@@ -44,6 +44,8 @@ export default {
 @import '../../assets/style/tabs.scss';
 
 .admin-panel {
+    padding: 15px 0;
+
     .header {
         padding: 0 40px;
     }

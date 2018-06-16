@@ -1,5 +1,6 @@
 <template lang="html">
     <div class="contests">
+        <h2 class='header'>Тренировки</h2>
         <router-link class='item' v-for="training in trainings" :key="training.id"
             :to="{ name: 'contest_detail', params: {id: training.id} }">
             <div class='data'>

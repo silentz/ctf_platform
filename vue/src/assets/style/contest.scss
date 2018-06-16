@@ -2,6 +2,13 @@
 $contest-border-radius: 5px;
 
 .contests {
+    padding: 10px 20px;
+
+    .header {
+        margin: 15px 0;
+        margin-bottom: 20px;
+    }
+
     .item {
         display: flex;
         flex-direction: row;

@@ -1,7 +1,7 @@
 <template lang="html">
     <div class="account">
         <div class="header">
-            <h2>{{ username }}</h2>
+            <h2>Личный кабинет: {{ username }}</h2>
         </div>
         <div class="content">
             <tabs>
