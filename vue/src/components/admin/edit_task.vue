@@ -1,6 +1,9 @@
 <template>
     <div class='task-edit'>
         <h2 class='header'>Редактировать таск: {{ task.name }}</h2>
+        <router-link :to='{name: "edit_contest", params: {id: task.contest}}' class='back-button'>
+            <button>Назад к редактированию контеста</button>
+        </router-link>
         <tabs>
             <tab name='Файлы'>
                 <modal name="file-create" height='auto'>
@@ -123,8 +126,13 @@ export default {
 .task-edit {
 
     .header {
-        margin-left: 40px;
-        margit-top: 10px;
+        padding: 10px 40px;
+        margin: 0;
+        margin-top: 20px;
+    }
+
+    .back-button {
+        padding: 0 40px;
     }
     .create-button {
         margin-bottom: 20px;

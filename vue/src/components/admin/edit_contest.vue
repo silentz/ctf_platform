@@ -1,6 +1,9 @@
 <template>
     <div class='contest-detail'>
         <h2 class='header'>Редактировать контест: {{ contest.name }}</h2>
+        <router-link :to='{name: "admin-root"}' class='back-button'>
+            <button>Назад к панели администратора</button>
+        </router-link>
         <tabs>
             <tab name='Таски'>
                 <modal name="task-create" height='auto'>
@@ -147,6 +150,12 @@ export default {
 .contest-detail {
     .header {
         padding: 10px 40px;
+        margin: 0;
+        margin-top: 20px;
+    }
+
+    .back-button {
+        padding: 0 40px;
     }
 
     .create-task-button {
