@@ -6,6 +6,7 @@ from django.contrib.auth.models import User, Group
 from datetime import datetime, timedelta
 import pytz
 
+
 class TaskTests(APITestCase):
 
     def create_instance(self, name, start_datetime, finish_datetime, allowed_groups, score, description,

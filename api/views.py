@@ -29,7 +29,8 @@ class TaskViewSet(viewsets.ModelViewSet):
         if self.action == 'pass_flag':
             self.permission_classes = [IsAdminOrParentContestAllowed, IsAdminOrParentContestOpen, IsAuthenticated]
         else:
-            self.permission_classes = [IsAdminOrParentContestAllowed, IsAdminOrParentContestOpen, IsAdminOrReadOnly, IsAuthenticated]
+            self.permission_classes = [IsAdminOrParentContestAllowed, IsAdminOrParentContestOpen,
+                                       IsAdminOrReadOnly, IsAuthenticated]
         return super(TaskViewSet, self).get_permissions()
 
     @action(methods=['get'], detail=False)
