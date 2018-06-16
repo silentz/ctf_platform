@@ -11,9 +11,6 @@ import RegisterComponent from './components/register.vue'
 import LoginComponent from './components/login.vue'
 import NavComponent from './components/navigation.vue'
 import PlatfromComponent, {PlatformRoutes} from './components/platform.vue'
-import AdminBase, {AdminRoutes} from './components/admin/base.vue'
-import ContestEdit from './components/admin/edit_contest.vue'
-import TaskEdit from './components/admin/edit_task.vue'
 import VuexStore from './store.js'
 
 let router = new VueRouter({
@@ -30,24 +27,6 @@ let router = new VueRouter({
             name: 'platfrom',
             redirect: '/platform/news',
             children: PlatformRoutes,
-            meta: {requiresAuth: true}
-        },
-        {
-            path: '/admin',
-            component: AdminBase,
-            name: 'admin-root',
-            meta: {requiresAuth: true},
-        },
-        {
-            path: '/admin/edit/:id',
-            component: ContestEdit,
-            name: 'edit_contest',
-            meta: {requiresAuth: true}
-        },
-        {
-            path: '/admin/edit-task/:id',
-            component: TaskEdit,
-            name: 'edit_task',
             meta: {requiresAuth: true}
         }
     ]

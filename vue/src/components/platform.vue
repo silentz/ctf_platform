@@ -48,6 +48,9 @@ import ContestDetailComponent from './contest_detail.vue'
 import ScoreboardComponent from './scoreboard.vue'
 import NewsComponent from './news.vue'
 import GroupsComponent from './groups.vue'
+import AdminBase, {AdminRoutes} from './admin/base.vue'
+import ContestEdit from './admin/edit_contest.vue'
+import TaskEdit from './admin/edit_task.vue'
 
 export let PlatformRoutes = [
     {path: 'trainings', component: TrainingComponent, name: 'trainings'},
@@ -56,7 +59,25 @@ export let PlatformRoutes = [
     {path: 'account', component: AccountComponent, name: 'account'},
     {path: 'scoreboard', component: ScoreboardComponent, name: 'scoreboard'},
     {path: 'news', component: NewsComponent, name: 'news'},
-    {path: 'grousp', component: GroupsComponent, name: 'groups'}
+    {path: 'grousp', component: GroupsComponent, name: 'groups'},
+    {
+        path: '/admin',
+        component: AdminBase,
+        name: 'admin-root',
+        meta: {requiresAuth: true},
+    },
+    {
+        path: '/admin/edit/:id',
+        component: ContestEdit,
+        name: 'edit_contest',
+        meta: {requiresAuth: true}
+    },
+    {
+        path: '/admin/edit-task/:id',
+        component: TaskEdit,
+        name: 'edit_task',
+        meta: {requiresAuth: true}
+    }
 ]
 
 export default {
@@ -71,7 +92,7 @@ export default {
     },
     data: function() {
         return {
-            visible: false
+            visible: true
         }
     }
 }
