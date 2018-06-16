@@ -4,6 +4,7 @@
             <div @click='visible=false' class='hide-button'>&#9776;</div>
             <div class='inner'>
                 <h3 class='username'>{{ username }}</h3>
+                <h3 class='admin-status' v-if='isAdmin'>admin</h3>
                 <hr class='delimiter'>
                 <ul class='list'>
                     <li class='item'>
@@ -146,10 +147,19 @@ $sidebar-hidden-width: 40px;
             .username {
                 text-align: center;
                 margin: 15px;
+                margin-bottom: 0;
+            }
+
+            .admin-status {
+                font-size: 0.8rem;
+                margin: 0;
+                color: red;
+                text-align: center;
             }
 
             .delimiter {
                 border-color: #444444;
+                margin-top: 10px;
             }
 
             .list {
