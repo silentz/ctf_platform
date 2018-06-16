@@ -1,5 +1,5 @@
 <template>
-    <div class='news'>
+    <div class='news-admin'>
         <modal name="news-create" height='auto'>
             <div class='modal-wrapper'>
                 <form @submit.prevent="postNews">
@@ -60,7 +60,7 @@ export default {
 </script>
 
 <style lang='scss'>
-.news {
+.news-admin {
     .add-group-button {
         margin-bottom: 15px;
     }
