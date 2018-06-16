@@ -21,13 +21,14 @@ let router = new VueRouter({
     linkActiveClass: 'link-active',
     linkExactActiveClass: 'link-active',
     routes: [
-        {path: '/', redirect: '/platform', name: 'root'},
+        {path: '/', redirect: '/platform/news', name: 'root'},
         {path: '/register', component: RegisterComponent, name: 'register'},
         {path: '/login', component: LoginComponent, name: 'login'},
         {
             path: '/platform',
             component: PlatfromComponent,
             name: 'platfrom',
+            redirect: '/platform/news',
             children: PlatformRoutes,
             meta: {requiresAuth: true}
         },
