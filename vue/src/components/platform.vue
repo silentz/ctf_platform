@@ -59,7 +59,7 @@ export let PlatformRoutes = [
     {path: 'account', component: AccountComponent, name: 'account'},
     {path: 'scoreboard', component: ScoreboardComponent, name: 'scoreboard'},
     {path: 'news', component: NewsComponent, name: 'news'},
-    {path: 'grousp', component: GroupsComponent, name: 'groups'},
+    {path: 'groups', component: GroupsComponent, name: 'groups'},
     {
         path: '/admin',
         component: AdminBase,
