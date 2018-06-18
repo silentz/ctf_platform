@@ -4,6 +4,15 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 
 
+class IsAdminOrTaskNotHidden(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        if request.user.is_staff:
+            return True
+        else:
+            return not obj.hidden
+
+
 class IsAdminOrReadOnly(permissions.BasePermission):
 
     def has_permission(self, request, view):
@@ -54,11 +63,15 @@ class IsAdminOrParentTaskAllowed(permissions.BasePermission):
 class IsAdminOrParentTaskOpen(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
-        if request.user.is_staff or obj.task.contest.training:
+        if request.user.is_staff:
             return True
+        elif obj.task.contest.training:
+            return not obj.task.hidden
         else:
             now = timezone.now()
-            return now >= obj.task.contest.start_datetime and now < obj.task.contest.finish_datetime
+            time_condtition = now >= obj.task.contest.start_datetime and now < obj.task.contest.finish_datetime
+            hidden_condition = not obj.task.hidden
+            return (time_condtition and hidden_condition)
 
 
 class IsAdminOrContestAllowed(permissions.BasePermission):

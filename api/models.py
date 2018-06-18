@@ -33,6 +33,7 @@ class Task(models.Model):
     contest = models.ForeignKey(Contest, related_name='tasks', null=True, blank=True, on_delete=models.SET_NULL)
     flag = models.CharField(max_length=512, null=True)
     category = models.ForeignKey(Category, related_name='tasks', null=True, blank=True, on_delete=models.SET_NULL)
+    hidden = models.BooleanField(default=False)
 
     def check_flag(self, flag):
         return flag == self.flag
