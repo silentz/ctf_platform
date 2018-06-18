@@ -12,7 +12,7 @@ from django.http import StreamingHttpResponse
 from wsgiref.util import FileWrapper
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.exceptions import PermissionDenied
-
+from django.shortcuts import get_object_or_404
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
@@ -67,6 +67,18 @@ class ContestViewSet(viewsets.ModelViewSet):
                 return Contest.objects.filter(training=False).all()
         else:
             return Contest.objects.all()
+
+    def is_permitted(self, request, obj):
+        for permission in self.permission_classes:
+            if not permission().has_object_permission(request, self, obj):
+                return False
+        return True
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        permitted = [x for x in queryset if self.is_permitted(request, x)]
+        serializer = ContestListSerializer(permitted, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(methods=['get'], detail=True)
     def scoreboard(self, request, pk, *args, **kwargs):
