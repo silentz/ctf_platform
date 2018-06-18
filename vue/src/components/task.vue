@@ -6,7 +6,7 @@
                     <div class='about'>
                         <div class='cross' @click.stop="hideTask()">&#x2715;</div>
                         <h2>{{ task.name }} ({{ task.category_name }}, {{ task.score }})</h2>
-                        <p>{{ task.description }}</p>
+                        <vue-markdown>{{ task.description }}</vue-markdown>
                         <p v-for="(hint, index) in hints" class='hint'>
                             Hint {{ index + 1 }}: {{ hint.text }}
                         </p>
@@ -44,6 +44,7 @@
 
 <script>
 import axios from 'axios'
+import VueMarkdown from 'vue-markdown'
 
 export default {
     props: ['task'],
@@ -85,6 +86,9 @@ export default {
                 this.mistake = true
             })
         }
+    },
+    components: {
+        VueMarkdown
     }
 }
 </script>
