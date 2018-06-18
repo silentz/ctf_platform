@@ -104,7 +104,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = ('id', 'name', 'score', 'description', 'contest',
+        fields = ('id', 'name', 'score', 'description', 'contest', 'hidden',
                   'category', 'files', 'hints', 'category_name', 'solved')
 
     def get_category_name(self, obj):
@@ -123,7 +123,7 @@ class TaskAdminSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = ('id', 'name', 'score', 'description', 'contest', 'category',
+        fields = ('id', 'name', 'score', 'description', 'contest', 'category', 'hidden',
                   'files', 'flag', 'hints', 'category_name', 'solved')
 
     def get_category_name(self, obj):

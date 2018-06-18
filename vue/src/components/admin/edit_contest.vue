@@ -11,6 +11,7 @@
                         <form @submit.prevent="postTask">
                             <h3>Создать таск</h3>
                             <input v-model='name' size="30" placeholder='Название таска' required>
+                            <label><input type="checkbox" v-model='hidden'> Таск скрыт</label>
                             <input type='number' v-model='score' size='30' placeholder="Очки" required>
                             <select v-model='category'>
                                 <option v-for='cat in categories' :key='cat.id' :value="cat.id">{{ cat.name }}</option>
@@ -80,7 +81,8 @@ export default {
             score: 0,
             description: "",
             flag: "",
-            category: 1
+            category: 1,
+            hidden: false
         }
     },
     methods: {
@@ -93,7 +95,8 @@ export default {
                 score: this.score,
                 files: [],
                 hints: [],
-                contest: this.contest.id
+                contest: this.contest.id,
+                hidden: this.hidden
             }).then(response => {
                 this.tasks.push(response.data)
             })
@@ -116,6 +119,7 @@ export default {
             this.description = ""
             this.flag = ""
             this.category = 1
+            this.hidden = false
             this.$modal.show('task-create')
         }
     },
@@ -181,6 +185,17 @@ export default {
                 outline: none;
                 padding: 6px;
                 border: none;
+            }
+            input[type='checkbox'] {
+                display: inline;
+                margin: 0;
+                border: none;
+                padding: 10px;
+                outline: none;
+            }
+            label {
+                margin: 5px 0;
+                user-select: none;
             }
             button {
                 outline: none;

@@ -28,6 +28,7 @@
                 <form @submit.prevent="updateTask">
                     <input v-model='name' size="30" placeholder='Название таска' required>
                     <input type='number' v-model='score' size='30' placeholder="Очки" required>
+                    <label><input type='checkbox' v-model='hidden'> Таск скрыт</label>
                     <select v-model='category'>
                         <option v-for='cat in categories' :key='cat.id' :value="cat.id">{{ cat.name }}</option>
                     </select>
@@ -56,7 +57,8 @@ export default {
             category: this.task.category,
             score: this.task.score,
             description: this.task.description,
-            flag: this.task.flag
+            flag: this.task.flag,
+            hidden: this.task.hidden
         }
     },
     methods: {
@@ -69,7 +71,8 @@ export default {
                 flag: this.flag,
                 files: this.task.files,
                 hints: this.task.hints,
-                contest: this.task.contest
+                contest: this.task.contest,
+                hidden: this.hidden
             }).then(response => {
                 this.task = response.data
             })
