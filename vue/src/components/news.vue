@@ -2,7 +2,7 @@
     <div class="news">
         <h2>Новости</h2>
         <div class="entry" v-for='entry in news'>
-            <p>{{ entry.text }}</p>
+            <vue-markdown>{{ entry.text }}</vue-markdown>
             <h5>&#128336; {{ getReadableDate(entry.time) }}</h5>
         </div>
     </div>
@@ -11,6 +11,7 @@
 <script>
 import axios from 'axios'
 import dateFormat from 'dateformat'
+import VueMarkdown from 'vue-markdown'
 
 export default {
     name: "News",
@@ -28,6 +29,9 @@ export default {
         axios.get('/api/news/').then(response => {
             this.news = response.data
         })
+    },
+    components: {
+        'vue-markdown': VueMarkdown
     }
 }
 </script>
