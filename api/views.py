@@ -14,6 +14,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 
+
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
 
@@ -48,6 +49,12 @@ class TaskViewSet(viewsets.ModelViewSet):
             return Response({'status': 'ok'}, status=status.HTTP_200_OK)
         else:
             return Response({'status': 'bad'}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(methods=['get'], detail=True)
+    def scoreboard(self, request, pk, *args, **kwargs):
+        entries = [entry for entry in TaskSolved.objects.get(task=self.get_object())]
+        result = [{'username': entry.user.username, 'time': entry.time} for entry in entries]
+        return Response(result, status=status.HTTP_200_OK)
 
 
 class ContestViewSet(viewsets.ModelViewSet):
