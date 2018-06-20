@@ -28,10 +28,12 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'pass_flag':
-            self.permission_classes = [IsAdminOrTaskNotHidden, IsAdminOrParentContestAllowed, IsAdminOrParentContestOpen, 
+            self.permission_classes = [IsAdminOrTaskNotHidden, IsAdminOrParentContestAllowed,
+                                       IsAdminOrParentContestOpen,
                                        IsAuthenticated]
         else:
-            self.permission_classes = [IsAdminOrTaskNotHidden, IsAdminOrParentContestAllowed, IsAdminOrParentContestOpen,
+            self.permission_classes = [IsAdminOrTaskNotHidden, IsAdminOrParentContestAllowed,
+                                       IsAdminOrParentContestOpen,
                                        IsAdminOrReadOnly, IsAuthenticated]
         return super(TaskViewSet, self).get_permissions()
 
@@ -211,8 +213,11 @@ class ScoreboardView(APIView):
         users = set([entry.user for entry in TaskSolved.objects.all()])
         result = []
         for user in users:
-            user_score = sum([entry.task.score for entry in TaskSolved.objects.filter(user=user)])
-            result.append({'username': user.username, 'score': user_score})
+            obj = TaskSolved.objects.filter(user=user)
+            user_score = sum([entry.task.score for entry in obj])
+            last_accepted = max([int(entry.time.timestamp()) for entry in obj])
+            result.append({'username': user.username, 'score': user_score, "last_accepted": last_accepted})
+        result = sorted(result, key=lambda x: (x['score'], x['last_accepted']))
         return Response(result, status=status.HTTP_200_OK)
 
 
