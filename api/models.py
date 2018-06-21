@@ -14,8 +14,11 @@ class Contest(models.Model):
         users = {entry.user for entry in entries}
         result = []
         for user in users:
-            score = sum([entry.task.score for entry in entries.filter(user=user)])
-            result.append({'username': user.username, 'score': score})
+            solved_by_user = entries.filter(user=user)
+            score = sum([entry.task.score for entry in solved_by_user])
+            last_accepted = max([int(entry.time.timestamp()) for entry in solved_by_user])
+            result.append({'username': user.username, 'score': score, "last_accepted": last_accepted})
+        result = sorted(result, key=lambda x: (x['score'], x['last_accepted']))
         return result
 
 

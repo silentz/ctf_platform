@@ -14,6 +14,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 
+
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
 
@@ -27,10 +28,12 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'pass_flag':
-            self.permission_classes = [IsAdminOrTaskNotHidden, IsAdminOrParentContestAllowed, IsAdminOrParentContestOpen, 
+            self.permission_classes = [IsAdminOrTaskNotHidden, IsAdminOrParentContestAllowed,
+                                       IsAdminOrParentContestOpen,
                                        IsAuthenticated]
         else:
-            self.permission_classes = [IsAdminOrTaskNotHidden, IsAdminOrParentContestAllowed, IsAdminOrParentContestOpen,
+            self.permission_classes = [IsAdminOrTaskNotHidden, IsAdminOrParentContestAllowed,
+                                       IsAdminOrParentContestOpen,
                                        IsAdminOrReadOnly, IsAuthenticated]
         return super(TaskViewSet, self).get_permissions()
 
@@ -48,6 +51,12 @@ class TaskViewSet(viewsets.ModelViewSet):
             return Response({'status': 'ok'}, status=status.HTTP_200_OK)
         else:
             return Response({'status': 'bad'}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(methods=['get'], detail=True)
+    def scoreboard(self, request, pk, *args, **kwargs):
+        entries = [entry for entry in TaskSolved.objects.get(task=self.get_object())]
+        result = [{'username': entry.user.username, 'time': entry.time} for entry in entries]
+        return Response(result, status=status.HTTP_200_OK)
 
 
 class ContestViewSet(viewsets.ModelViewSet):
@@ -204,8 +213,11 @@ class ScoreboardView(APIView):
         users = set([entry.user for entry in TaskSolved.objects.all()])
         result = []
         for user in users:
-            user_score = sum([entry.task.score for entry in TaskSolved.objects.filter(user=user)])
-            result.append({'username': user.username, 'score': user_score})
+            obj = TaskSolved.objects.filter(user=user)
+            user_score = sum([entry.task.score for entry in obj])
+            last_accepted = max([int(entry.time.timestamp()) for entry in obj])
+            result.append({'username': user.username, 'score': user_score, "last_accepted": last_accepted})
+        result = sorted(result, key=lambda x: (x['score'], x['last_accepted']))
         return Response(result, status=status.HTTP_200_OK)
 
 
