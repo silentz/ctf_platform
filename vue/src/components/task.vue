@@ -150,6 +150,11 @@ $task-height: 80px;
         height: 100%;
         box-sizing: border-box;
 
+        a {
+            color: red;
+            text-decoration: none;
+        }
+
         .hint {
             margin: 3px 0;
         }
