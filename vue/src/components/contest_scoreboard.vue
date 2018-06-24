@@ -19,32 +19,32 @@
 
 <script>
 import axios from 'axios'
+import {WebSocketBridge} from '../assets/js/websocketbridge.js'
 
 export default {
     name: "ContestScoreboard",
     props: ['contest_id'],
     data: function() {
         return {
-            results: []
+            results: [],
+            socket: {}
         }
     },
     methods: {
         loadScoreboard() {
             axios.get(`/api/contests/${this.$route.params.id}/scoreboard/`)
             .then(response => {
-                this.results = response.data.sort((a, b) => {
-                    if (a.score > b.score)
-                        return -1
-                    else if (a.score < b.score)
-                        return 1
-                    return 0
-                })
+                this.results = response.data
             })
         }
     },
     created: function () {
         this.loadScoreboard()
-        setInterval(this.loadScoreboard, 1000 * 60 * 3)
+        this.socket = new WebSocketBridge();
+        this.socket.connect(`/ws/contest/${this.$route.params.id}/scoreboard/`)
+        this.socket.listen((action, stream) => {
+            this.loadScoreboard()
+        })
     }
 }
 </script>

@@ -11,12 +11,14 @@
 <script>
 import axios from 'axios'
 import dateFormat from 'dateformat'
+import {WebSocketBridge} from '../assets/js/websocketbridge.js'
 
 export default {
     name: 'Notifications',
     data: function() {
         return {
-            messages: []
+            messages: [],
+            socket: {}
         }
     },
     methods: {
@@ -28,11 +30,34 @@ export default {
         },
         getReadableDate(datestring) {
             return dateFormat(new Date(datestring), "HH:MM:ss dd.mm.yyyy")
+        },
+        notify(text) {
+            let n = new Notification('Новое уведомление', {
+                body: text,
+                icon: '../../../flag-icon.png'
+            })
         }
     },
     created: function() {
         this.loadMessages()
-        setInterval(this.loadMessages, 1000 * 60 * 3)
+        this.socket = new WebSocketBridge();
+        this.socket.connect(`/ws/contest/${this.$route.params.id}/notifications/`)
+        this.socket.listen((action, stream) => {
+            if (action.text) {
+                if (Notification.permission.toLowerCase() == "granted") {
+                    this.notify(action.text)
+                } else if(Notification.permission.toLowerCase() == "denied") {
+                    // nothing :C
+                } else {
+                    Notification.requestPermission((result) => {
+                        if (result.toLowerCase() == "granted") {
+                            this.notify(action.text)
+                        } 
+                    });
+                }
+            }
+            this.loadMessages()
+        })
     }
 }
 </script>
