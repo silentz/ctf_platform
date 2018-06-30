@@ -3,6 +3,9 @@ from django.contrib.auth.models import User, Group
 
 
 class Contest(models.Model):
+    class Meta:
+        ordering = ("id",)
+
     name = models.CharField(max_length=512, blank=True, null=True)
     training = models.BooleanField(default=True)
     start_datetime = models.DateTimeField(null=True)
