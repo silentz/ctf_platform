@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        full_name: "",
         username: "",
         user_status: "anonymous",
     },
@@ -14,6 +15,9 @@ export default new Vuex.Store({
         },
         setUsername(state, username) {
             state.username = username
+        },
+        setFullName(state, full_name) {
+            state.full_name = full_name
         }
     },
     getters: {

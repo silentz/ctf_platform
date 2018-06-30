@@ -5,9 +5,14 @@ from api.permissions import *
 
 
 class UserSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ('id', 'username', 'groups')
+        fields = ('id', 'username', 'groups', 'full_name')
+
+    def get_full_name(self, obj):
+        return obj.last_name
 
 
 class GroupCreateSerializer(serializers.ModelSerializer):

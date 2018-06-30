@@ -33,6 +33,7 @@ new Vue({
             let data = JSON.parse(xhr.responseText)
             this.$store.commit('setUserStatus', data.status)
             this.$store.commit('setUsername', data.username)
+            this.$store.commit('setFullName', data.full_name)
         }
     }
 })

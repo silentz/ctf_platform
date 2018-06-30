@@ -249,8 +249,13 @@ class ScoreboardView(APIView):
             obj = TaskSolved.objects.filter(user=user)
             user_score = sum([entry.task.score for entry in obj])
             last_accepted = max([int(entry.time.timestamp()) for entry in obj])
-            result.append({'username': user.username, 'score': user_score, "last_accepted": last_accepted})
-        result = sorted(result, key=lambda x: (x['score'], x['last_accepted']))
+            result.append({
+                'username': user.username,
+                'full_name': user.last_name,
+                'score': user_score,
+                "last_accepted": last_accepted
+            })
+        result = sorted(result, key=lambda x: (-x['score'], x['last_accepted']))
         return Response(result, status=status.HTTP_200_OK)
 
 
@@ -265,9 +270,10 @@ class UserStatusView(APIView):
             )
         else:
             username = request.user.username
+            full_name = request.user.last_name
             user_status = "admin" if request.user.is_staff else "user"
             return Response(
-                {"status": user_status, "username": username},
+                {"status": user_status, "username": username, "full_name": full_name},
                 status=status.HTTP_200_OK
             )
 
@@ -302,8 +308,9 @@ class UserRegistrationAPIView(APIView):
         serializer = UserSerializer(data=request.data)
         username = request.data.get('username', None)
         password = request.data.get('password', None)
+        full_name = request.data.get('full_name', None)
         if serializer.is_valid() and password is not None:
-            user = User(username=username)
+            user = User(username=username, last_name=full_name)
             user.set_password(password)
             user.save()
             return Response({'status': 'ok'}, status=status.HTTP_201_CREATED)

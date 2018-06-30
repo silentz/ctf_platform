@@ -4,13 +4,15 @@
         <table cellspacing="0" cellpadding="0">
             <thead>
                 <th>Позиция</th>
-                <th>Имя команды</th>
+                <th>Логин</th>
+                <th>Имя участника</th>
                 <th>Результат</th>
             </thead>
             <tbody>
                 <tr v-for="(result, index) in results">
                     <td>{{ index + 1 }}</td>
                     <td>{{ result.username }}</td>
+                    <td>{{ result.full_name }}</td>
                     <td>{{ result.score }}</td>
                 </tr>
             </tbody>

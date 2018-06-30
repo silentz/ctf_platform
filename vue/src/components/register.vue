@@ -1,13 +1,14 @@
 <template>
     <div class="ctf-auth">
         <div class='centered'>
-            <h3>Sign up</h3>
+            <h3>Регистрация</h3>
             <div class='error' v-show="showError">Error: {{ error }}</div>
             <form @submit.prevent="handleSubmit">
-                <input size="40" v-model='username' type='text' required placeholder="Username">
-                <input size="40" v-model='password' type='password' required placeholder="Password">
-                <input size="40" v-model='repeatPassword' type='password' required placeholder="Repeat password">
-                <button>Submit</button>
+                <input size="40" v-model='username' type='text' required placeholder="Логин">
+                <input size="40" v-model='full_name' type='text' required placeholder="ФИО">
+                <input size="40" v-model='password' type='password' required placeholder="Пароль">
+                <input size="40" v-model='repeatPassword' type='password' required placeholder="Повторите пароль">
+                <button>Подтвердить</button>
             </form>
         </div>
     </div>
@@ -23,6 +24,7 @@ export default {
             username: '',
             password: '',
             repeatPassword: '',
+            full_name: '',
             showError: false,
             error: ''
         }
@@ -46,10 +48,12 @@ export default {
         registerUser() {
             axios.post("/api/auth/register/", {
                 username: this.username,
-                password: this.password
+                password: this.password,
+                full_name: this.full_name
             }).then(response => {
                 this.username = ""
                 this.password = ""
+                this.full_name = ""
                 this.$router.push('/')
             }).catch(err => {
                 this.printError('This username is already taken!')

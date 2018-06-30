@@ -8,16 +8,16 @@
             <template v-if="isAuthenticated">
                 <li>
                     <a @click="logout" href="" class='link'>
-                        Logout
+                        Выйти
                     </a>
                 </li>
             </template>
             <template v-else>
                 <li>
-                    <router-link class='link' :to="{ name: 'login' }">Log in</router-link>
+                    <router-link class='link' :to="{ name: 'login' }">Вход</router-link>
                 </li>
                 <li>
-                    <router-link class='link' :to="{ name: 'register' }">Sign up</router-link>
+                    <router-link class='link' :to="{ name: 'register' }">Регистрация</router-link>
                 </li>
             </template>
         </ul>

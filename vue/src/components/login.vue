@@ -1,12 +1,12 @@
 <template>
     <div class="ctf-auth">
         <div class='centered'>
-            <h3>Log in</h3>
+            <h3>Вход</h3>
             <div class='error' v-show="showError">Error: {{ error }}</div>
             <form @submit.prevent="handleSubmit">
-                <input size="40" v-model='username' type='text' required placeholder="Username">
-                <input size="40" v-model='password' type='password' required placeholder="Password">
-                <button>Submit</button>
+                <input size="40" v-model='username' type='text' required placeholder="Логин">
+                <input size="40" v-model='password' type='password' required placeholder="Пароль">
+                <button>Подтвердить</button>
             </form>
         </div>
     </div>

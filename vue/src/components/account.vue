@@ -1,7 +1,8 @@
 <template lang="html">
     <div class="account">
         <div class="header">
-            <h2>Личный кабинет: {{ username }}</h2>
+            <h2>Личный кабинет</h2>
+            <h3>{{ full_name }} [{{ username }}]</h3>
         </div>
         <div class="content">
             <tabs>
@@ -76,7 +77,10 @@ export default {
     },
     computed: {
         username: function() {
-            return this.$store.state.username;
+            return this.$store.state.username
+        },
+        full_name: function() {
+            return this.$store.state.full_name
         }
     },
     created: function() {
