@@ -97,9 +97,9 @@ class ContestViewSet(viewsets.ModelViewSet):
         return True
 
     def list(self, request):
-        queryset = self.get_queryset()
-        permitted = [x for x in queryset if self.is_permitted(request, x)]
-        serializer = ContestListSerializer(permitted, many=True)
+        queryset = Contest.objects.filter(training=(request.query_params.get('training', None) == 'true'))
+        contests = [contest for contest in queryset if self.is_permitted(request, contest)]
+        serializer = ContestListSerializer(contests, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(methods=['get'], detail=True)
