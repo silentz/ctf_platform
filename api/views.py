@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from django.contrib.auth.models import User, Group, Permission
+from django.contrib.auth.models import User, Group
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -15,8 +15,13 @@ from rest_framework.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 
 
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+
+
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
+    channel_layer = get_channel_layer()
 
     def get_serializer_class(self):
         if self.request.user.is_staff:
@@ -48,6 +53,14 @@ class TaskViewSet(viewsets.ModelViewSet):
         obj = self.get_object()
         if obj.check_flag(request.data.get('flag', None)):
             TaskSolved.objects.get_or_create(task=obj, user=request.user)
+            async_to_sync(self.channel_layer.group_send)(
+                "scoreboard",
+                {'type': 'scoreboard.changed'}
+            )
+            async_to_sync(self.channel_layer.group_send)(
+                "contest_{}_scoreboard".format(obj.contest.id),
+                {'type': 'scoreboard.changed'}
+            )
             return Response({'status': 'ok'}, status=status.HTTP_200_OK)
         else:
             return Response({'status': 'bad'}, status=status.HTTP_400_BAD_REQUEST)
@@ -84,9 +97,9 @@ class ContestViewSet(viewsets.ModelViewSet):
         return True
 
     def list(self, request):
-        queryset = self.get_queryset()
-        permitted = [x for x in queryset if self.is_permitted(request, x)]
-        serializer = ContestListSerializer(permitted, many=True)
+        queryset = Contest.objects.filter(training=(request.query_params.get('training', None) == 'true'))
+        contests = [contest for contest in queryset if self.is_permitted(request, contest)]
+        serializer = ContestListSerializer(contests, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(methods=['get'], detail=True)
@@ -133,6 +146,14 @@ class MessageViewSet(viewsets.ModelViewSet):
                           IsAdminOrReadOnly, IsAuthenticated)
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+    channel_layer = get_channel_layer()
+
+    def call_update(self, contest_id, notify=None):
+        contest_group = "contest_{}_notifications".format(contest_id)
+        async_to_sync(self.channel_layer.group_send)(contest_group, {
+            'type': 'notifications.changed',
+            'data': notify
+        })
 
     def get_queryset(self):
         contest_id = self.request.query_params.get('for', None)
@@ -140,6 +161,18 @@ class MessageViewSet(viewsets.ModelViewSet):
             return Message.objects.none()
         else:
             return Message.objects.filter(contest__id=contest_id)
+    
+    def create(self, request, *args, **kwargs):
+        self.call_update(request.data['contest'], notify=request.data['text'])
+        return super(MessageViewSet, self).create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        self.call_update(request.data['contest'])
+        return super(MessageViewSet, self).update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        self.call_update(self.get_object().contest.id)
+        return super(MessageViewSet, self).destroy(request, *args, **kwargs)
 
 
 class NewsViewSet(viewsets.ModelViewSet):

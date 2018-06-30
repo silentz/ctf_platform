@@ -20,30 +20,30 @@
 
 <script>
 import axios from 'axios'
+import {WebSocketBridge} from '../assets/js/websocketbridge.js'
 
 export default {
     name: "Scoreboard",
     data: function() {
         return {
-            results: []
+            results: [],
+            socket: {}
         }
     },
     methods: {
         loadScoreboard() {
             axios.get('/api/scoreboard/').then(response => {
-                this.results = response.data.sort((a, b) => {
-                    if (a.score > b.score)
-                        return -1
-                    else if (a.score < b.score)
-                        return 1
-                    return 0
-                })
+                this.results = response.data
             })
         }
     },
-    created: function() {
+    created: function () {
         this.loadScoreboard()
-        setInterval(this.loadScoreboard, 1000 * 60 * 3)
+        this.socket = new WebSocketBridge();
+        this.socket.connect('/ws/scoreboard/')
+        this.socket.listen((action, stream) => {
+            this.loadScoreboard()
+        })
     }
 }
 </script>

@@ -38,10 +38,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     # user apps
     'rest_framework',
     'api',
 ]
+
+CHANNEL_LAYERS = {
+    'default': {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            'hosts': [(os.environ.get('REDIS_HOST', "127.0.0.1"), 6379)],
+        }
+    }
+}
+
+ASGI_APPLICATION = 'ctf_platform.routing.application'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
