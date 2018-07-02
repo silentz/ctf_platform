@@ -3,32 +3,54 @@
         <modal :name='"task" + task.id' height="auto">
             <div class='modal-wrapper'>
                 <div class="task-detail">
-                    <div class='about'>
+                    <div class='header'>
                         <div class='cross' @click.stop="hideTask()">&#x2715;</div>
                         <h2>{{ task.name }} ({{ task.category_name }}, {{ task.score }})</h2>
-                        <vue-markdown>{{ task.description }}</vue-markdown>
-                        <p v-for="(hint, index) in hints" class='hint'>
-                            Hint {{ index + 1 }}: {{ hint.text }}
-                        </p>
-                        <div class='files' v-if="this.files.length > 0">
-                            <h3>Файлы:</h3>
-                            <ul>
-                                <li class='file' v-for='file in this.files'>
-                                    <a :href="'/api/files/' + file.id + '/download/'">
-                                        {{ file.name }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
-                    <form @submit.prevent="sendFlag">
-                        <p v-show="mistake" class='form-mistake'>Неверный флаг</p>
-                        <p v-show="task.solved" class='form-solved'>Верно!</p>
-                        <div class='fields' v-if='!task.solved'>
-                            <input v-model='flag' type='text' required placeholder="Flag">
-                            <button type='submit'>Check</button>
-                        </div>
-                    </form>
+                    <tabs>
+                        <tab name='Описание'>
+                            <div class='about'>
+                                <vue-markdown>{{ task.description }}</vue-markdown>
+                                <p v-for="(hint, index) in hints" class='hint'>
+                                    Hint {{ index + 1 }}: {{ hint.text }}
+                                </p>
+                                <div class='files' v-if="this.files.length > 0">
+                                    <h3>Файлы:</h3>
+                                    <ul>
+                                        <li class='file' v-for='file in this.files'>
+                                            <a :href="'/api/files/' + file.id + '/download/'">
+                                                {{ file.name }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <form @submit.prevent="sendFlag">
+                                <p v-show="mistake" class='form-mistake'>Неверный флаг</p>
+                                <p v-show="task.solved" class='form-solved'>Верно!</p>
+                                <div class='fields' v-if='!task.solved'>
+                                    <input v-model='flag' type='text' required placeholder="Flag">
+                                    <button type='submit'>Check</button>
+                                </div>
+                            </form>
+                        </tab>
+                        <tab :name="'Решили (' + solved.length + ')'">
+                            <div class='solved-panel'>
+                                <table>
+                                    <thead>
+                                        <th>Логин</th>
+                                        <th>Время</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for='solver in solved'>
+                                            <td>{{ solver.username }}</td>
+                                            <td>{{ getReadableDate(solver.time) }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </tab>
+                    </tabs>
                 </div>
             </div>
         </modal>
@@ -45,6 +67,7 @@
 <script>
 import axios from 'axios'
 import VueMarkdown from 'vue-markdown'
+import dateFormat from 'dateformat'
 
 export default {
     props: ['task'],
@@ -53,6 +76,7 @@ export default {
             flag: '',
             files: [],
             hints: [],
+            solved: [],
             mistake: false
         }
     },
@@ -69,6 +93,9 @@ export default {
                 this.hints.push(response.data)
             })
         }
+        axios.get(`/api/tasks/${this.task.id}/scoreboard/`).then(response => {
+            this.solved = response.data
+        })
     },
     methods: {
         showTask() {
@@ -85,6 +112,9 @@ export default {
             }).catch(err => {
                 this.mistake = true
             })
+        },
+        getReadableDate(datestring) {
+            return dateFormat(new Date(datestring), "HH:MM dd.mm.yyyy")
         }
     },
     components: {
@@ -142,6 +172,8 @@ $task-height: 80px;
     box-sizing: border-box;
 
     .task-detail {
+        @import "../assets/style/task-tabs.scss";
+
         padding: 10px 15px;
         display: flex;
         flex-direction: column;
@@ -155,79 +187,99 @@ $task-height: 80px;
             text-decoration: none;
         }
 
-        .hint {
-            margin: 3px 0;
+        .header {
+            h2 {
+                margin-bottom: 2px;
+            }
+            .cross {
+                cursor: pointer;
+                user-select: none;
+                top: 5px;
+                right: 10px;
+                position: absolute;
+                font-size: 2rem;
+                float: right;
+            }
         }
 
-        .files {
-            margin: 10px 0;
-            h3 { margin: 5px 0; }
+        .solved-panel {
+            padding: 10px;
 
-            ul {
-                padding: 0 20px;
-                a {
-                    text-decoration: none;
-                    color: yellow;
+            table {
+                width: 100%;
+            }
+        }
+
+        .about {
+            .hint {
+                margin: 3px 0;
+            }
+
+            .files {
+                margin: 10px 0;
+                h3 { margin: 5px 0; }
+
+                ul {
+                    padding: 0 20px;
+                    a {
+                        text-decoration: none;
+                        color: yellow;
+                    }
                 }
             }
-        }
 
-        h2 {
-            margin-top: 15px;
-        }
-
-        .form-mistake {
-            color: red;
-        }
-
-        .form-solved {
-            color: #76ff03;
-        }
-
-        .fields {
-            margin: 5px 0;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: stretch;
-            max-width: 100%;
-
-            input {
-                outline: none;
-                margin-right: 10px;
-                font-size: 1rem;
-                padding: 5px 5px;
-                font-family: 'Roboto Mono', monospace;
-                border: none;
-                display: inline-block;
-                transition: .3s;
-            }
-
-            button {
-                display: inline-block;
-                font-size: 1rem;
-                margin-top: 0;
-                color: #614444;
-                display: inline-block;
-                padding: 0 5px;
-                border: none;
-                background-color: inherit;
-                margin: 0;
-                background-color: #616161;
-                font-size: 1.1rem;
-                color: white;
-                outline: none;
+            h2 {
+                margin-top: 15px;
             }
         }
 
-        .cross {
-            cursor: pointer;
-            user-select: none;
-            top: 5px;
-            right: 10px;
-            position: absolute;
-            font-size: 2rem;
-            float: right;
+        form {
+            margin-top: 20px; 
+
+            .form-mistake {
+                color: red;
+            }
+
+            .form-solved {
+                color: #76ff03;
+            }
+
+            .fields {
+                height: 30px;
+                margin: 5px 0;
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: stretch;
+                max-width: 100%;
+
+                input {
+                    outline: none;
+                    margin-right: 10px;
+                    font-size: 1rem;
+                    padding: 5px 5px;
+                    font-family: 'Roboto Mono', monospace;
+                    border: none;
+                    display: inline-block;
+                    transition: .3s;
+                }
+
+                button {
+                    display: inline-block;
+                    font-size: 1rem;
+                    margin-top: 0;
+                    color: #614444;
+                    display: inline-block;
+                    padding: 0 5px;
+                    border: none;
+                    background-color: inherit;
+                    margin: 0;
+                    background-color: #616161;
+                    font-size: 1.1rem;
+                    color: white;
+                    outline: none;
+                }
+            }
         }
     }
 }

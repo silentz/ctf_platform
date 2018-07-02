@@ -67,7 +67,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=True)
     def scoreboard(self, request, pk, *args, **kwargs):
-        entries = [entry for entry in TaskSolved.objects.get(task=self.get_object())]
+        entries = TaskSolved.objects.filter(task=self.get_object()).order_by("time")
         result = [{'username': entry.user.username, 'time': entry.time} for entry in entries]
         return Response(result, status=status.HTTP_200_OK)
 
