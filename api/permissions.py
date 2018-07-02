@@ -36,7 +36,7 @@ class IsAdminOrParentContestAllowed(permissions.BasePermission):
         else:
             user_groups = request.user.groups.all()
             contest_groups = obj.contest.allowed_groups.all()
-            return user_groups.intersection(contest_groups).count() > 0
+            return (user_groups & contest_groups).count() > 0
 
 
 class IsAdminOrParentContestOpen(permissions.BasePermission):
@@ -57,7 +57,7 @@ class IsAdminOrParentTaskAllowed(permissions.BasePermission):
         else:
             user_groups = request.user.groups.all()
             contest_groups = obj.task.contest.allowed_groups.all()
-            return user_groups.intersection(contest_groups).count() > 0
+            return (user_groups & contest_groups).count() > 0
 
 
 class IsAdminOrParentTaskOpen(permissions.BasePermission):
@@ -82,7 +82,7 @@ class IsAdminOrContestAllowed(permissions.BasePermission):
         else:
             user_groups = request.user.groups.all()
             contest_groups = obj.allowed_groups.all()
-            return user_groups.intersection(contest_groups).count() > 0
+            return (user_groups & contest_groups).count() > 0
 
 
 class IsAdminOrContestOpen(permissions.BasePermission):
@@ -104,7 +104,7 @@ class IsAdminOrTargetContestAllowed(permissions.BasePermission):
         else:
             user_groups = request.user.groups.all()
             contest_groups = contest.allowed_groups.all()
-            return user_groups.intersection(contest_groups).count() > 0
+            return (user_groups & contest_groups).count() > 0
 
 
 class IsAdminOrTargetContestOpen(permissions.BasePermission):
@@ -116,3 +116,4 @@ class IsAdminOrTargetContestOpen(permissions.BasePermission):
         else:
             now = timezone.now()
             return now >= contest.start_datetime and now < contest.finish_datetime
+
