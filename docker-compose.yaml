@@ -15,8 +15,6 @@ services:
             - ./config/mysql.cnf:/etc/mysql/conf.d/custom.cnf
     channels:
         image: redis
-        ports:
-            - "6379:6379"
     api:
         restart: always
         build:
