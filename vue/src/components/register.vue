@@ -2,7 +2,7 @@
     <div class="ctf-auth">
         <div class='centered'>
             <h3>Регистрация</h3>
-            <div class='error' v-show="showError">Error: {{ error }}</div>
+            <div class='error' v-show="showError">{{ error }}</div>
             <form @submit.prevent="handleSubmit">
                 <input size="40" v-model='username' type='text' required placeholder="Логин">
                 <input size="40" v-model='full_name' type='text' required placeholder="ФИО">
@@ -39,7 +39,7 @@ export default {
         },
         handleSubmit() {
             if (this.repeatPassword != this.password) {
-                this.printError("Passwords are not equal!")
+                this.printError("Пароли не совпадают!")
             } else {
                 this.disableError()
                 this.registerUser()
@@ -50,13 +50,19 @@ export default {
                 username: this.username,
                 password: this.password,
                 full_name: this.full_name
+            }, {
+                responseType: 'json'
             }).then(response => {
                 this.username = ""
                 this.password = ""
                 this.full_name = ""
                 this.$router.push('/')
             }).catch(err => {
-                this.printError('This username is already taken!')
+                if (err.response.data.status == 'blocked') {
+                    this.printError('Регистрация заблокирована из-за хеха!')
+                } else {
+                    this.printError('Этот логин уже занят!')
+                }
             })
         }
     }

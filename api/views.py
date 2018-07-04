@@ -18,6 +18,8 @@ from django.shortcuts import get_object_or_404
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
+# registration setting
+from django.conf import settings
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
@@ -309,7 +311,9 @@ class UserRegistrationAPIView(APIView):
         username = request.data.get('username', None)
         password = request.data.get('password', None)
         full_name = request.data.get('full_name', None)
-        if serializer.is_valid() and password is not None:
+        if not settings.ALLOW_REGISTRATION:
+            return Response({"status": "blocked"}, status=status.HTTP_400_BAD_REQUEST)
+        elif serializer.is_valid() and (password is not None):
             user = User(username=username, last_name=full_name)
             user.set_password(password)
             user.save()
