@@ -39,7 +39,7 @@ class Task(models.Model):
 
     name = models.CharField(max_length=512)
     score = models.IntegerField()
-    description = models.TextField()  # TODO: markdown support
+    description = models.TextField(null=True, blank=True)
     contest = models.ForeignKey(Contest, related_name='tasks', null=True, blank=True, on_delete=models.SET_NULL)
     flag = models.CharField(max_length=512, null=True)
     category = models.ForeignKey(Category, related_name='tasks', null=True, blank=True, on_delete=models.SET_NULL)
