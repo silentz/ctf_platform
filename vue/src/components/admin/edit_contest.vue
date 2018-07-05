@@ -30,6 +30,7 @@
                         <th>Категория</th>
                         <th>Стоимость</th>
                         <th>Флаг</th>
+                        <th>Скрыт</th>
                         <th>Операции</th>
                     </thead>
                     <tbody>
@@ -211,6 +212,7 @@ export default {
     table {
         width: 100%;
         border: none;
+        // table-layout: fixed;
 
         th {
             text-align: left;

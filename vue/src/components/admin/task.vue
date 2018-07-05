@@ -4,7 +4,10 @@
         <td class='category'>{{ task.category_name }}</td>
         <td class='score'>{{ task.score }}</td>
         <td class='flag'>{{ task.flag }}</td>
-        
+        <td>
+            <input type="checkbox" @change="updateTask" v-model="hidden">
+        </td>
+
         <td>
             <router-link :to='{name: "edit_task", params: {id: task.id}}'>
                 <button>&#x21B3;</button>
